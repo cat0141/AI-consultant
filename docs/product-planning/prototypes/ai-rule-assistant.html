@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI规则助手 - AI增长操作系统原型</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --panel-soft: #f8fafc;
+      --line: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --primary: #2468f2;
+      --primary-dark: #1752c8;
+      --primary-soft: #eaf1ff;
+      --green: #16a34a;
+      --green-soft: #eaf8ef;
+      --orange: #f59e0b;
+      --orange-soft: #fff7e6;
+      --red: #ef4444;
+      --red-soft: #fff1f2;
+      --purple: #7c3aed;
+      --purple-soft: #f3edff;
+      --shadow: 0 16px 40px rgba(15, 23, 42, .08);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    .app { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 248px;
+      background: #0f172a;
+      color: #dbeafe;
+      padding: 22px 18px;
+      flex-shrink: 0;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+    .logo-mark {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      display: grid; place-items: center; color: #fff; font-weight: 800;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, .35);
+    }
+    .logo-title { font-weight: 700; color: #fff; line-height: 1.2; }
+    .logo-sub { color: #93c5fd; font-size: 12px; margin-top: 2px; }
+    .nav-group-title { font-size: 12px; color: #94a3b8; margin: 24px 10px 10px; }
+    .nav-item {
+      height: 42px; border-radius: 12px; display: flex; align-items: center; gap: 10px;
+      padding: 0 12px; color: #cbd5e1; margin-bottom: 6px; cursor: pointer;
+    }
+    .nav-item.active { background: rgba(59, 130, 246, .18); color: #fff; border: 1px solid rgba(147, 197, 253, .22); }
+    .nav-icon { width: 22px; text-align: center; opacity: .9; }
+
+    .main { flex: 1; min-width: 0; }
+    .topbar {
+      height: 68px; background: rgba(255, 255, 255, .86); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px; position: sticky; top: 0; z-index: 5;
+    }
+    .breadcrumbs { color: var(--muted); font-size: 13px; }
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .search {
+      height: 36px; width: 260px; border: 1px solid var(--line); border-radius: 999px;
+      background: var(--panel-soft); padding: 0 14px; color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .avatar { width: 34px; height: 34px; border-radius: 50%; background: #dbeafe; color: #1d4ed8; display: grid; place-items: center; font-weight: 700; }
+
+    .page { padding: 28px; }
+    .hero {
+      background: linear-gradient(135deg, #ffffff, #edf4ff 55%, #f7f2ff);
+      border: 1px solid #e3e8f4;
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1.35fr .9fr;
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+    .hero h1 { margin: 0 0 10px; font-size: 26px; letter-spacing: -.3px; }
+    .hero p { margin: 0; color: #475569; line-height: 1.7; }
+    .hero-flow { display: flex; gap: 8px; flex-wrap: wrap; align-content: center; justify-content: flex-end; }
+    .flow-pill {
+      background: rgba(255,255,255,.78); border: 1px solid #dbe5f5; color: #334155;
+      border-radius: 999px; padding: 8px 12px; font-size: 12px; box-shadow: 0 6px 16px rgba(15,23,42,.05);
+    }
+
+    .grid { display: grid; grid-template-columns: 410px minmax(0, 1fr); gap: 20px; align-items: start; }
+    .card {
+      background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, .045); overflow: hidden;
+    }
+    .card-header { padding: 18px 20px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+    .card-title { font-weight: 700; font-size: 16px; }
+    .card-subtitle { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .card-body { padding: 20px; }
+
+    .stepper { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 20px; }
+    .step {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .step-num { width: 26px; height: 26px; border-radius: 50%; background: #eef2ff; color: var(--primary); display: grid; place-items: center; font-weight: 700; font-size: 12px; }
+    .step.done .step-num { background: var(--green); color: white; }
+    .step.active { border-color: #a7c4ff; background: #f7faff; box-shadow: 0 8px 22px rgba(36,104,242,.10); }
+    .step.active .step-num { background: var(--primary); color: white; }
+    .step-text { font-size: 12px; line-height: 1.35; }
+
+    label { display: block; font-weight: 650; margin-bottom: 8px; color: #1f2937; }
+    .textarea {
+      width: 100%; min-height: 110px; resize: vertical; border: 1px solid var(--line); border-radius: 14px;
+      padding: 14px; line-height: 1.55; outline: none; background: #fbfdff; color: var(--text);
+      font-family: inherit;
+    }
+    .textarea:focus, .input:focus, .select:focus { border-color: #93b7ff; box-shadow: 0 0 0 4px rgba(36,104,242,.08); }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
+    .chip {
+      border: 1px solid #dbe3ef; background: #fff; color: #334155; border-radius: 999px; padding: 7px 10px;
+      cursor: pointer; font-size: 12px; transition: .18s;
+    }
+    .chip:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+      border: 1px solid transparent; border-radius: 12px; height: 38px; padding: 0 14px; display: inline-flex; align-items: center; gap: 7px;
+      cursor: pointer; font-weight: 650; font-family: inherit; transition: .18s; white-space: nowrap;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: #fff; color: #334155; border-color: var(--line); }
+    .btn-secondary:hover { background: #f8fafc; border-color: #cbd5e1; }
+    .btn-green { background: var(--green); color: white; }
+    .btn-light { background: var(--primary-soft); color: var(--primary); }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+    .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+    .meta-box { border: 1px solid var(--line); background: var(--panel-soft); border-radius: 14px; padding: 12px; }
+    .meta-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .meta-value { font-weight: 750; }
+
+    .rule-table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; }
+    .rule-table th { background: #f8fafc; color: #475569; text-align: left; font-size: 12px; padding: 12px; border-bottom: 1px solid var(--line); }
+    .rule-table td { padding: 10px 12px; border-bottom: 1px solid #edf0f5; vertical-align: middle; }
+    .rule-table tr:last-child td { border-bottom: 0; }
+    .field-tag { display: inline-flex; align-items: center; border-radius: 999px; padding: 5px 8px; background: #eef2ff; color: #3730a3; font-size: 12px; font-weight: 650; }
+    .cond-type { font-size: 12px; color: var(--muted); }
+    .input, .select {
+      width: 100%; height: 34px; border: 1px solid var(--line); border-radius: 10px; padding: 0 10px; outline: none; background: #fff; font-family: inherit;
+    }
+    .mini-input { width: 88px; height: 32px; border: 1px solid var(--line); border-radius: 10px; padding: 0 9px; }
+    .link-btn { color: var(--primary); cursor: pointer; font-weight: 650; font-size: 12px; }
+
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 700; }
+    .status-draft { background: #f1f5f9; color: #475569; }
+    .status-gen { background: var(--primary-soft); color: var(--primary); }
+    .status-check { background: var(--orange-soft); color: #b45309; }
+    .status-save { background: var(--green-soft); color: var(--green); }
+
+    .tabs { display: flex; border-bottom: 1px solid var(--line); padding: 0 18px; gap: 4px; }
+    .tab { padding: 13px 14px; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; font-weight: 650; }
+    .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .sample-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+    .metric { border: 1px solid var(--line); border-radius: 14px; background: var(--panel-soft); padding: 14px; }
+    .metric-value { font-size: 24px; font-weight: 800; }
+    .metric-label { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .metric.good .metric-value { color: var(--green); }
+    .metric.warn .metric-value { color: var(--orange); }
+    .metric.primary .metric-value { color: var(--primary); }
+    .metric.purple .metric-value { color: var(--purple); }
+
+    .sample-list { display: grid; gap: 10px; }
+    .sample-item {
+      border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
+      background: #fff;
+    }
+    .sample-name { font-weight: 750; display: flex; align-items: center; gap: 8px; }
+    .sample-desc { color: var(--muted); margin-top: 6px; font-size: 12px; line-height: 1.55; }
+    .pill { border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 700; }
+    .pill-high { background: var(--green-soft); color: var(--green); }
+    .pill-mid { background: var(--orange-soft); color: #b45309; }
+    .pill-low { background: #f1f5f9; color: #64748b; }
+    .feedback { display: flex; gap: 6px; }
+    .feedback button { border: 1px solid var(--line); background: #fff; border-radius: 10px; padding: 7px 9px; cursor: pointer; color: #334155; }
+    .feedback button.active { background: var(--primary-soft); border-color: #aac5ff; color: var(--primary); font-weight: 700; }
+
+    .ai-note { border: 1px solid #d8c8ff; background: var(--purple-soft); color: #4c1d95; padding: 14px; border-radius: 14px; line-height: 1.65; margin-top: 14px; }
+    .drawer {
+      position: fixed; right: 22px; bottom: 22px; width: 360px; background: #fff; border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow);
+      transform: translateY(20px); opacity: 0; pointer-events: none; transition: .22s; z-index: 20;
+    }
+    .drawer.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
+    .drawer-header { padding: 16px 18px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+    .drawer-body { padding: 16px 18px; line-height: 1.6; }
+    .toast {
+      position: fixed; left: 50%; top: 22px; transform: translateX(-50%) translateY(-20px); opacity: 0;
+      background: #0f172a; color: #fff; padding: 12px 16px; border-radius: 999px; box-shadow: var(--shadow); transition: .2s; z-index: 50;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .empty-state { padding: 32px; border: 1px dashed #cbd5e1; border-radius: 16px; text-align: center; color: var(--muted); background: #fafcff; }
+    .progress-line { height: 8px; border-radius: 999px; background: #e5e7eb; overflow: hidden; margin-top: 10px; }
+    .progress-inner { height: 100%; width: 0; background: linear-gradient(90deg, #2468f2, #7c3aed); transition: .55s; }
+
+    @media (max-width: 1180px) {
+      .grid, .hero { grid-template-columns: 1fr; }
+      .hero-flow { justify-content: flex-start; }
+      .stepper { grid-template-columns: 1fr 1fr; }
+      .sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-mark">AI</div>
+        <div>
+          <div class="logo-title">AI增长操作系统</div>
+          <div class="logo-sub">Growth OS Prototype</div>
+        </div>
+      </div>
+      <div class="nav-group-title">增长工作台</div>
+      <div class="nav-item active"><span class="nav-icon">✦</span> AI规则助手</div>
+      <div class="nav-item"><span class="nav-icon">▦</span> 规则模板中心</div>
+      <div class="nav-item"><span class="nav-icon">◎</span> 批量分析任务</div>
+      <div class="nav-item"><span class="nav-icon">☑</span> 行动建议清单</div>
+      <div class="nav-group-title">数据与运营</div>
+      <div class="nav-item"><span class="nav-icon">#</span> 字段字典</div>
+      <div class="nav-item"><span class="nav-icon">◇</span> 关键词词库</div>
+      <div class="nav-item"><span class="nav-icon">▣</span> 规则效果看板</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="breadcrumbs">产品原型 / AI增长操作系统 / AI规则助手</div>
+          <div style="font-weight:750;margin-top:4px;">自然语言生成规则配置表</div>
+        </div>
+        <div class="top-actions">
+          <div class="search">⌕ 搜索规则、字段、客户</div>
+          <button class="btn btn-secondary" onclick="showToast('已复制演示链接')">复制演示链接</button>
+          <div class="avatar">顾</div>
+        </div>
+      </header>
+
+      <div class="page">
+        <section class="hero">
+          <div>
+            <h1>AI规则助手</h1>
+            <p>把顾问或运营的自然语言想法，直接转成可编辑的规则配置表。用户修改字段、阈值、关键词、排除词和权重后，先用少量企业数据验证，再保存成企业内部规则。</p>
+          </div>
+          <div class="hero-flow">
+            <span class="flow-pill">自然语言输入</span>
+            <span class="flow-pill">生成规则配置表</span>
+            <span class="flow-pill">手动修改</span>
+            <span class="flow-pill">小样本验证</span>
+            <span class="flow-pill">保存企业内部规则</span>
+          </div>
+        </section>
+
+        <div class="stepper" id="stepper">
+          <div class="step active" data-step="1"><div class="step-num">1</div><div class="step-text">输入目标<br/>客户类型</div></div>
+          <div class="step" data-step="2"><div class="step-num">2</div><div class="step-text">生成规则<br/>配置表</div></div>
+          <div class="step" data-step="3"><div class="step-num">3</div><div class="step-text">手动修改<br/>规则条件</div></div>
+          <div class="step" data-step="4"><div class="step-num">4</div><div class="step-text">小样本<br/>验证</div></div>
+          <div class="step" data-step="5"><div class="step-num">5</div><div class="step-text">保存企业<br/>内部规则</div></div>
+        </div>
+
+        <div class="grid">
+          <section class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">1. 输入想找的客户</div>
+                <div class="card-subtitle">输入越贴近业务，AI生成的规则越可用</div>
+              </div>
+              <span class="status-badge status-draft" id="ruleStatus">草稿</span>
+            </div>
+            <div class="card-body">
+              <label for="goalInput">自然语言目标</label>
+              <textarea class="textarea" id="goalInput">帮我找适合做高新申报的客户</textarea>
+              <div class="chips">
+                <button class="chip" onclick="setPrompt('帮我找适合做高新申报的客户')">高新申报</button>
+                <button class="chip" onclick="setPrompt('帮我找服务成本高但收费低、适合涨价沟通的客户')">涨价客户</button>
+                <button class="chip" onclick="setPrompt('帮我找近半年广告投放比较多，适合推荐数字营销服务的客户')">广告营销</button>
+                <button class="chip" onclick="setPrompt('帮我找近期聊天中提到股东、法人、地址变化，可能需要工商变更的客户')">工商变更</button>
+              </div>
+              <div class="btn-row">
+                <button class="btn btn-primary" onclick="generateRule()">✦ 生成规则配置表</button>
+                <button class="btn btn-secondary" onclick="resetPage()">重置</button>
+              </div>
+
+              <div class="meta-grid">
+                <div class="meta-box">
+                  <div class="meta-label">可用字段</div>
+                  <div class="meta-value">128 个</div>
+                </div>
+                <div class="meta-box">
+                  <div class="meta-label">标签/衍生字段</div>
+                  <div class="meta-value">42 个</div>
+                </div>
+                <div class="meta-box">
+                  <div class="meta-label">关键词词库</div>
+                  <div class="meta-value">12 组</div>
+                </div>
+                <div class="meta-box">
+                  <div class="meta-label">企业样本</div>
+                  <div class="meta-value">2,418 户</div>
+                </div>
+              </div>
+
+              <div class="ai-note">
+                <strong>演示说明：</strong>点击“生成规则配置表”后，右侧会出现可编辑的规则条件。修改阈值或关键词后，可进入小样本验证并保存规则。
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="tabs">
+              <div class="tab active" data-tab="config" onclick="switchTab('config')">规则配置表</div>
+              <div class="tab" data-tab="sample" onclick="switchTab('sample')">小样本验证</div>
+              <div class="tab" data-tab="preview" onclick="switchTab('preview')">行动建议预览</div>
+            </div>
+
+            <div class="card-body panel active" id="panel-config">
+              <div id="configEmpty" class="empty-state">
+                <div style="font-size:36px;margin-bottom:8px;">✦</div>
+                输入目标后点击“生成规则配置表”，AI会自动生成可编辑的规则结构。
+              </div>
+
+              <div id="configContent" style="display:none;">
+                <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px;">
+                  <div>
+                    <div class="card-title" id="ruleNameTitle">高新申报潜力客户</div>
+                    <div class="card-subtitle">AI已根据字段字典、标签和关键词词库生成初始配置</div>
+                  </div>
+                  <div class="btn-row">
+                    <button class="btn btn-light" onclick="addCondition()">+ 添加条件</button>
+                    <button class="btn btn-secondary" onclick="showDrawer()">查看AI解释</button>
+                  </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns: repeat(4,1fr);gap:12px;margin-bottom:16px;">
+                  <div>
+                    <label>规则名称</label>
+                    <input class="input" id="ruleName" value="高新申报潜力客户" />
+                  </div>
+                  <div>
+                    <label>适用场景</label>
+                    <select class="select" id="sceneSelect">
+                      <option>高新申报 / 项目申报</option>
+                      <option>涨价沟通</option>
+                      <option>广告/数字营销</option>
+                      <option>工商变更</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label>客户范围</label>
+                    <select class="select">
+                      <option>全部在服客户</option>
+                      <option>当前顾问客户</option>
+                      <option>指定区域客户</option>
+                      <option>指定行业客户</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label>规则归属</label>
+                    <select class="select" id="ownership">
+                      <option>企业内部规则</option>
+                      <option>个人草稿</option>
+                      <option>候选通用规则</option>
+                    </select>
+                  </div>
+                </div>
+
+                <table class="rule-table" id="ruleTable">
+                  <thead>
+                    <tr>
+                      <th style="width:120px;">条件类型</th>
+                      <th style="width:190px;">字段/标签</th>
+                      <th style="width:130px;">操作符</th>
+                      <th>值 / 关键词</th>
+                      <th style="width:90px;">权重</th>
+                      <th style="width:70px;">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ruleTbody"></tbody>
+                </table>
+
+                <div style="display:grid;grid-template-columns: 1fr 1fr; gap:14px; margin-top:16px;">
+                  <div class="meta-box">
+                    <div class="meta-label">命中解释模板</div>
+                    <div contenteditable="true" style="outline:none;line-height:1.6;">该客户命中{命中字段}，具备{适用场景}的潜在需求，建议顾问优先进行初步沟通。</div>
+                  </div>
+                  <div class="meta-box">
+                    <div class="meta-label">建议动作</div>
+                    <div contenteditable="true" style="outline:none;line-height:1.6;">顾问联系客户，发送初步评估话术；客户有兴趣后转专家或销售跟进。</div>
+                  </div>
+                </div>
+
+                <div class="btn-row" style="margin-top:18px;justify-content:flex-end;">
+                  <button class="btn btn-secondary" onclick="saveDraft()">保存草稿</button>
+                  <button class="btn btn-primary" onclick="runSample()">运行小样本验证</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body panel" id="panel-sample">
+              <div id="sampleEmpty" class="empty-state">
+                规则配置后，点击“运行小样本验证”，这里会展示命中企业、接近命中企业和用户反馈。
+              </div>
+              <div id="sampleContent" style="display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                  <div>
+                    <div class="card-title">小样本验证</div>
+                    <div class="card-subtitle">样本范围：当前顾问客户；样本数量：50 户</div>
+                  </div>
+                  <div class="btn-row">
+                    <button class="btn btn-secondary" onclick="rerunSample()">重新验证</button>
+                    <button class="btn btn-green" onclick="saveRule()">保存为企业内部规则</button>
+                  </div>
+                </div>
+                <div class="sample-summary">
+                  <div class="metric primary"><div class="metric-value">50</div><div class="metric-label">验证样本</div></div>
+                  <div class="metric good"><div class="metric-value">12</div><div class="metric-label">命中企业</div></div>
+                  <div class="metric warn"><div class="metric-value">8</div><div class="metric-label">接近命中</div></div>
+                  <div class="metric purple"><div class="metric-value" id="accurateRate">83%</div><div class="metric-label">初步准确率</div></div>
+                </div>
+                <div class="progress-line"><div class="progress-inner" id="progressInner"></div></div>
+                <div class="sample-list" id="sampleList" style="margin-top:16px;"></div>
+                <div class="ai-note" id="sampleAiNote">
+                  <strong>AI建议：</strong>当前规则对科技、软件、制造类客户命中较好。建议将“普通商贸服务”加入排除条件，并将“研发费用 > 0”权重提高到 35%。
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body panel" id="panel-preview">
+              <div id="previewEmpty" class="empty-state">
+                保存规则后，可以预览该规则生成的顾问行动建议。
+              </div>
+              <div id="previewContent" style="display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                  <div>
+                    <div class="card-title">顾问行动建议预览</div>
+                    <div class="card-subtitle">规则：<span id="previewRuleName">高新申报潜力客户</span></div>
+                  </div>
+                  <button class="btn btn-primary" onclick="showToast('已模拟推送至顾问行动清单')">推送给顾问</button>
+                </div>
+                <div class="sample-list">
+                  <div class="sample-item">
+                    <div>
+                      <div class="sample-name">A科技有限公司 <span class="pill pill-high">高推荐</span></div>
+                      <div class="sample-desc">命中依据：软件行业；经营范围含“技术开发”；存在研发费用；近12个月收入较高。</div>
+                      <div class="ai-note" style="margin-top:10px;">建议话术：王总，看到贵司今年研发投入和技术服务业务都有增长，可以先做一次高新申报条件评估，判断是否具备申报基础。</div>
+                    </div>
+                    <div class="feedback"><button>复制话术</button><button>转销售</button></div>
+                  </div>
+                  <div class="sample-item">
+                    <div>
+                      <div class="sample-name">B软件服务公司 <span class="pill pill-high">高推荐</span></div>
+                      <div class="sample-desc">命中依据：软件开发行业；知识产权数量 2；技术服务发票多次出现。</div>
+                      <div class="ai-note" style="margin-top:10px;">建议动作：顾问先联系客户做申报资格预评估，确认研发人员、研发费用和知识产权情况。</div>
+                    </div>
+                    <div class="feedback"><button>复制话术</button><button>稍后提醒</button></div>
+                  </div>
+                  <div class="sample-item">
+                    <div>
+                      <div class="sample-name">C智能制造公司 <span class="pill pill-mid">中推荐</span></div>
+                      <div class="sample-desc">命中依据：制造行业；经营范围含“研发”；收入达标，但研发费用字段缺失。</div>
+                      <div class="ai-note" style="margin-top:10px;">建议动作：先询问是否有研发项目、研发人员和知识产权，再判断是否进入高新服务跟进。</div>
+                    </div>
+                    <div class="feedback"><button>复制话术</button><button>不适合</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <strong>AI生成说明</strong>
+      <span class="link-btn" onclick="hideDrawer()">关闭</span>
+    </div>
+    <div class="drawer-body">
+      <p>AI根据“高新申报潜力客户”的目标，从字段字典中选择了行业、注册年限、经营范围、研发费用、知识产权、企业状态等字段。</p>
+      <p>规则采用“必须条件 + 任一条件 + 排除条件”的结构，方便用户控制命中范围，并通过权重影响推荐等级。</p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">操作成功</div>
+
+  <script>
+    const defaultRows = [
+      { type: '必须满足', field: '行业', op: '属于', value: '科技 / 软件 / 制造 / 环保 / 电子设备', weight: 30 },
+      { type: '必须满足', field: '注册年限', op: '大于等于', value: '1 年', weight: 10 },
+      { type: '任一满足', field: '经营范围关键词', op: '包含任一', value: '技术开发 / 软件开发 / 研发 / 技术服务', weight: 25 },
+      { type: '任一满足', field: '研发费用', op: '大于', value: '0 元', weight: 25 },
+      { type: '任一满足', field: '知识产权数量', op: '大于', value: '0', weight: 10 },
+      { type: '排除条件', field: '企业状态', op: '不属于', value: '注销 / 吊销 / 已流失', weight: 0 }
+    ];
+
+    const sampleData = [
+      { name: 'A科技有限公司', level: '命中', pill: 'pill-high', reason: '行业=软件；经营范围含技术开发；存在研发费用 18.6万；近12个月收入 860万。' },
+      { name: 'B软件服务公司', level: '命中', pill: 'pill-high', reason: '软件开发行业；知识产权 2 项；技术服务发票 6 次。' },
+      { name: 'C智能制造公司', level: '接近命中', pill: 'pill-mid', reason: '制造行业；经营范围含研发；收入达标，但研发费用字段缺失。' },
+      { name: 'D商贸服务公司', level: '疑似误判', pill: 'pill-low', reason: '经营范围含技术咨询，但主营行业偏商贸服务，建议加入排除词。' },
+      { name: 'E环保设备公司', level: '命中', pill: 'pill-high', reason: '环保设备制造；有研发费用；存在专利相关发票。' }
+    ];
+
+    function setPrompt(text) {
+      document.getElementById('goalInput').value = text;
+    }
+
+    function updateSteps(step) {
+      document.querySelectorAll('.step').forEach(s => {
+        const n = Number(s.dataset.step);
+        s.classList.toggle('done', n < step);
+        s.classList.toggle('active', n === step);
+      });
+    }
+
+    function setStatus(type, text) {
+      const el = document.getElementById('ruleStatus');
+      el.className = 'status-badge ' + type;
+      el.textContent = text;
+    }
+
+    function generateRule() {
+      document.getElementById('configEmpty').style.display = 'none';
+      document.getElementById('configContent').style.display = 'block';
+      setStatus('status-gen', '已生成');
+      updateSteps(2);
+      renderRuleRows(defaultRows);
+      switchTab('config');
+      showToast('AI已生成规则配置表，可手动修改');
+    }
+
+    function renderRuleRows(rows) {
+      const tbody = document.getElementById('ruleTbody');
+      tbody.innerHTML = '';
+      rows.forEach((row, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="cond-type">${row.type}</span></td>
+          <td><span class="field-tag">${row.field}</span></td>
+          <td><select class="select"><option>${row.op}</option><option>等于</option><option>包含任一</option><option>大于</option><option>不属于</option></select></td>
+          <td><input class="input" value="${row.value}" /></td>
+          <td><input class="mini-input" type="number" value="${row.weight}" />%</td>
+          <td><span class="link-btn" onclick="this.closest('tr').remove(); showToast('已删除条件')">删除</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function addCondition() {
+      const tbody = document.getElementById('ruleTbody');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><span class="cond-type">任一满足</span></td>
+        <td><span class="field-tag">新增字段</span></td>
+        <td><select class="select"><option>包含任一</option><option>大于</option><option>等于</option></select></td>
+        <td><input class="input" value="请输入关键词或阈值" /></td>
+        <td><input class="mini-input" type="number" value="10" />%</td>
+        <td><span class="link-btn" onclick="this.closest('tr').remove(); showToast('已删除条件')">删除</span></td>
+      `;
+      tbody.appendChild(tr);
+      updateSteps(3);
+      showToast('已添加新条件，可直接编辑');
+    }
+
+    function saveDraft() {
+      setStatus('status-gen', '草稿已保存');
+      showToast('规则草稿已保存');
+    }
+
+    function runSample() {
+      if (document.getElementById('configContent').style.display === 'none') {
+        showToast('请先生成规则配置表');
+        return;
+      }
+      switchTab('sample');
+      document.getElementById('sampleEmpty').style.display = 'none';
+      document.getElementById('sampleContent').style.display = 'block';
+      document.getElementById('progressInner').style.width = '83%';
+      renderSamples();
+      setStatus('status-check', '验证中');
+      updateSteps(4);
+      showToast('已完成50家企业小样本验证');
+    }
+
+    function rerunSample() {
+      document.getElementById('progressInner').style.width = '76%';
+      document.getElementById('accurateRate').textContent = '76%';
+      showToast('已重新验证，建议继续调整排除条件');
+    }
+
+    function renderSamples() {
+      const list = document.getElementById('sampleList');
+      list.innerHTML = '';
+      sampleData.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'sample-item';
+        div.innerHTML = `
+          <div>
+            <div class="sample-name">${item.name} <span class="pill ${item.pill}">${item.level}</span></div>
+            <div class="sample-desc">${item.reason}</div>
+          </div>
+          <div class="feedback">
+            <button onclick="markFeedback(this, '准确')">准确</button>
+            <button onclick="markFeedback(this, '需调整')">需调整</button>
+            <button onclick="markFeedback(this, '不准确')">不准确</button>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    function markFeedback(btn, text) {
+      btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      showToast('已标记：' + text);
+    }
+
+    function saveRule() {
+      setStatus('status-save', '已保存');
+      updateSteps(5);
+      document.getElementById('previewEmpty').style.display = 'none';
+      document.getElementById('previewContent').style.display = 'block';
+      document.getElementById('previewRuleName').textContent = document.getElementById('ruleName').value || '高新申报潜力客户';
+      showToast('已保存为企业内部规则');
+      setTimeout(() => switchTab('preview'), 450);
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + tab).classList.add('active');
+    }
+
+    function showDrawer() { document.getElementById('drawer').classList.add('show'); }
+    function hideDrawer() { document.getElementById('drawer').classList.remove('show'); }
+
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    function resetPage() {
+      document.getElementById('configEmpty').style.display = 'block';
+      document.getElementById('configContent').style.display = 'none';
+      document.getElementById('sampleEmpty').style.display = 'block';
+      document.getElementById('sampleContent').style.display = 'none';
+      document.getElementById('previewEmpty').style.display = 'block';
+      document.getElementById('previewContent').style.display = 'none';
+      setStatus('status-draft', '草稿');
+      updateSteps(1);
+      switchTab('config');
+      showToast('已重置演示页面');
+    }
+  </script>
+</body>
+</html>
