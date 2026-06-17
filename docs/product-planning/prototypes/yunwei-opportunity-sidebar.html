@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>云微侧边栏机会提示 - AI增长操作系统原型</title>
+  <style>
+    :root {
+      --bg: #eef2f7;
+      --panel: #ffffff;
+      --line: #e5e7eb;
+      --text: #111827;
+      --muted: #64748b;
+      --primary: #2563eb;
+      --primary-soft: #eaf1ff;
+      --green: #16a34a;
+      --green-soft: #eaf8ef;
+      --orange: #f59e0b;
+      --orange-soft: #fff7e6;
+      --red: #ef4444;
+      --red-soft: #fff1f2;
+      --purple: #7c3aed;
+      --purple-soft: #f3edff;
+      --slate: #0f172a;
+      --radius: 16px;
+      --shadow: 0 16px 38px rgba(15, 23, 42, .08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, #edf2ff, #f8fafc 45%, #f1f5f9);
+      font-size: 14px;
+    }
+    .page-shell { min-height: 100vh; padding: 24px; }
+    .prototype-frame {
+      max-width: 1440px;
+      height: calc(100vh - 48px);
+      min-height: 780px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid #dbe2ea;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 72px 310px minmax(460px, 1fr) 420px;
+    }
+
+    .rail { background: #0f172a; color: #cbd5e1; padding: 16px 10px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .rail-logo { width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, #2563eb, #7c3aed); display: grid; place-items: center; color: #fff; font-weight: 800; margin-bottom: 14px; }
+    .rail-item { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; cursor: pointer; font-size: 18px; color: #94a3b8; }
+    .rail-item.active { background: rgba(37, 99, 235, .18); color: #fff; border: 1px solid rgba(147, 197, 253, .22); }
+    .rail-spacer { flex: 1; }
+
+    .customer-list { background: #f8fafc; border-right: 1px solid var(--line); display: flex; flex-direction: column; min-width: 0; }
+    .list-header { padding: 18px; border-bottom: 1px solid var(--line); background: #fff; }
+    .list-title { font-size: 18px; font-weight: 800; margin-bottom: 12px; }
+    .search { height: 38px; border: 1px solid var(--line); border-radius: 999px; padding: 0 13px; background: #f8fafc; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+    .filter-row { display: flex; gap: 8px; margin-top: 12px; }
+    .filter { border: 1px solid var(--line); background: #fff; color: #475569; border-radius: 999px; padding: 6px 10px; font-size: 12px; cursor: pointer; }
+    .filter.active { background: var(--primary-soft); color: var(--primary); border-color: #b6cdfc; font-weight: 700; }
+    .customers { overflow: auto; padding: 10px; }
+    .customer-card { background: #fff; border: 1px solid transparent; border-radius: 16px; padding: 13px; margin-bottom: 10px; cursor: pointer; transition: .18s; }
+    .customer-card:hover { border-color: #cbd5e1; box-shadow: 0 8px 18px rgba(15,23,42,.05); }
+    .customer-card.active { border-color: #8db2ff; background: #f7faff; box-shadow: 0 8px 22px rgba(37,99,235,.1); }
+    .cust-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .cust-name { font-weight: 750; line-height: 1.35; }
+    .cust-meta { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.5; }
+    .badge { border-radius: 999px; padding: 4px 7px; font-size: 11px; font-weight: 800; white-space: nowrap; }
+    .badge-high { background: var(--red-soft); color: #dc2626; }
+    .badge-mid { background: var(--orange-soft); color: #b45309; }
+    .badge-low { background: var(--green-soft); color: var(--green); }
+    .badge-blue { background: var(--primary-soft); color: var(--primary); }
+    .badge-purple { background: var(--purple-soft); color: var(--purple); }
+
+    .chat { display: flex; flex-direction: column; min-width: 0; background: #f6f7fb; }
+    .chat-header { height: 72px; background: #fff; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 22px; }
+    .chat-company { display: flex; align-items: center; gap: 12px; }
+    .company-avatar { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: #dbeafe; color: #1d4ed8; font-weight: 800; }
+    .company-name { font-weight: 800; font-size: 16px; }
+    .company-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .btn { border: 1px solid transparent; border-radius: 12px; height: 36px; padding: 0 12px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-weight: 700; font-family: inherit; white-space: nowrap; transition: .18s; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-secondary { background: #fff; border-color: var(--line); color: #334155; }
+    .btn-secondary:hover { background: #f8fafc; }
+    .btn-soft { background: var(--primary-soft); color: var(--primary); }
+    .btn-green { background: var(--green); color: #fff; }
+    .btn-orange { background: #fff7ed; color: #c2410c; border-color: #fed7aa; }
+    .btn-mini { height: 30px; padding: 0 9px; font-size: 12px; border-radius: 10px; }
+
+    .chat-body { flex: 1; overflow: auto; padding: 22px 26px; }
+    .day-divider { text-align: center; color: #94a3b8; font-size: 12px; margin: 10px 0 18px; }
+    .msg { display: flex; gap: 10px; margin-bottom: 16px; align-items: flex-start; }
+    .msg.right { justify-content: flex-end; }
+    .msg-avatar { width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; display: grid; place-items: center; color: #475569; font-weight: 800; flex-shrink: 0; }
+    .msg.right .msg-avatar { background: #dbeafe; color: #1d4ed8; order: 2; }
+    .bubble { max-width: 68%; padding: 11px 13px; border-radius: 14px; background: #fff; border: 1px solid #edf0f5; line-height: 1.6; box-shadow: 0 4px 12px rgba(15,23,42,.035); }
+    .msg.right .bubble { background: #2563eb; color: #fff; border-color: #2563eb; }
+    .msg-time { color: #94a3b8; font-size: 11px; margin-top: 4px; }
+    .inline-highlight { color: #c2410c; font-weight: 800; background: #fff7ed; border-radius: 6px; padding: 1px 4px; }
+    .chat-input { height: 112px; background: #fff; border-top: 1px solid var(--line); padding: 14px 18px; }
+    .input-box { height: 56px; border: 1px solid var(--line); border-radius: 14px; padding: 12px; color: #475569; background: #fbfdff; }
+    .input-actions { display: flex; justify-content: space-between; margin-top: 10px; align-items: center; color: var(--muted); font-size: 12px; }
+
+    .sidebar-panel { background: #fff; border-left: 1px solid var(--line); display: flex; flex-direction: column; min-width: 0; }
+    .side-header { padding: 18px 18px 14px; border-bottom: 1px solid var(--line); }
+    .side-title-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .side-title { font-weight: 850; font-size: 17px; }
+    .side-sub { color: var(--muted); font-size: 12px; margin-top: 5px; }
+    .tabs { display: flex; gap: 4px; margin-top: 14px; background: #f1f5f9; padding: 4px; border-radius: 12px; }
+    .tab { flex: 1; text-align: center; padding: 8px 6px; border-radius: 10px; cursor: pointer; color: #64748b; font-weight: 700; font-size: 12px; }
+    .tab.active { background: #fff; color: var(--primary); box-shadow: 0 4px 12px rgba(15,23,42,.07); }
+    .side-body { flex: 1; overflow: auto; padding: 16px; }
+    .panel-tab { display: none; }
+    .panel-tab.active { display: block; }
+
+    .opportunity-card { border: 1px solid #d9e7ff; background: linear-gradient(135deg, #f7faff, #ffffff); border-radius: 18px; padding: 16px; margin-bottom: 14px; }
+    .opp-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .opp-title { font-weight: 850; font-size: 16px; }
+    .opp-score { width: 64px; height: 64px; border-radius: 18px; background: var(--primary); color: #fff; display: grid; place-items: center; text-align: center; box-shadow: 0 10px 22px rgba(37,99,235,.22); }
+    .opp-score strong { display: block; font-size: 22px; line-height: 1; }
+    .opp-score span { font-size: 11px; opacity: .85; }
+    .reason-list { display: grid; gap: 8px; margin: 14px 0; }
+    .reason { display: flex; gap: 8px; align-items: flex-start; color: #334155; font-size: 13px; line-height: 1.5; }
+    .reason-dot { width: 18px; height: 18px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-size: 11px; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+    .suggestion { border: 1px solid #e9d5ff; background: #faf5ff; color: #581c87; border-radius: 14px; padding: 12px; line-height: 1.65; margin: 12px 0; }
+    .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .full { grid-column: 1 / -1; }
+
+    .section-title { font-weight: 800; margin: 16px 0 10px; display: flex; align-items: center; justify-content: space-between; }
+    .info-table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+    .info-table td { border-bottom: 1px solid #edf0f5; padding: 10px; vertical-align: top; line-height: 1.5; }
+    .info-table tr:last-child td { border-bottom: 0; }
+    .info-table td:first-child { background: #f8fafc; color: #64748b; width: 98px; font-size: 12px; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 7px; }
+    .tag { border-radius: 999px; padding: 5px 8px; font-size: 12px; background: #f1f5f9; color: #475569; }
+    .tag.blue { background: var(--primary-soft); color: var(--primary); }
+    .tag.green { background: var(--green-soft); color: var(--green); }
+    .tag.orange { background: var(--orange-soft); color: #b45309; }
+    .tag.purple { background: var(--purple-soft); color: var(--purple); }
+
+    .timeline { display: grid; gap: 12px; }
+    .timeline-item { display: grid; grid-template-columns: 28px 1fr; gap: 10px; }
+    .timeline-dot { width: 28px; height: 28px; border-radius: 50%; background: #e0e7ff; color: #3730a3; display: grid; place-items: center; font-size: 12px; font-weight: 800; }
+    .timeline-content { border: 1px solid var(--line); border-radius: 14px; padding: 10px; line-height: 1.55; }
+    .timeline-meta { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+    .status-banner { display: none; border-radius: 14px; padding: 12px; margin-bottom: 12px; line-height: 1.6; }
+    .status-banner.show { display: block; }
+    .status-success { background: var(--green-soft); color: #166534; border: 1px solid #bbf7d0; }
+    .status-warn { background: var(--orange-soft); color: #9a3412; border: 1px solid #fed7aa; }
+
+    .drawer { position: fixed; right: 34px; bottom: 34px; width: 360px; background: #fff; border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); transform: translateY(22px); opacity: 0; pointer-events: none; transition: .22s; z-index: 20; }
+    .drawer.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
+    .drawer-header { padding: 16px 18px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; font-weight: 800; }
+    .drawer-body { padding: 16px 18px; line-height: 1.7; }
+    .toast { position: fixed; left: 50%; top: 24px; transform: translateX(-50%) translateY(-20px); background: #0f172a; color: #fff; padding: 12px 16px; border-radius: 999px; opacity: 0; transition: .2s; z-index: 30; box-shadow: var(--shadow); }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 1220px) {
+      .prototype-frame { grid-template-columns: 72px 280px 1fr; }
+      .sidebar-panel { position: fixed; right: 24px; top: 24px; bottom: 24px; width: 420px; box-shadow: var(--shadow); border-radius: 20px; overflow: hidden; z-index: 10; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="prototype-frame">
+      <nav class="rail">
+        <div class="rail-logo">云</div>
+        <div class="rail-item active">💬</div>
+        <div class="rail-item">📋</div>
+        <div class="rail-item">✦</div>
+        <div class="rail-item">📊</div>
+        <div class="rail-spacer"></div>
+        <div class="rail-item">⚙</div>
+      </nav>
+
+      <aside class="customer-list">
+        <div class="list-header">
+          <div class="list-title">客户会话</div>
+          <div class="search">⌕ 搜索客户 / 群聊</div>
+          <div class="filter-row">
+            <button class="filter active" onclick="filterCustomers('all', this)">全部</button>
+            <button class="filter" onclick="filterCustomers('high', this)">高优先级</button>
+            <button class="filter" onclick="filterCustomers('today', this)">今日建议</button>
+          </div>
+        </div>
+        <div class="customers" id="customerList"></div>
+      </aside>
+
+      <section class="chat">
+        <div class="chat-header">
+          <div class="chat-company">
+            <div class="company-avatar" id="companyAvatar">科</div>
+            <div>
+              <div class="company-name" id="companyName">A科技有限公司服务群</div>
+              <div class="company-sub" id="companySub">顾问：张三 · 在服客户 · 近30天消息 86 条</div>
+            </div>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-secondary" onclick="showToast('已打开客户档案')">客户档案</button>
+            <button class="btn btn-primary" onclick="showToast('已刷新AI机会分析')">刷新机会</button>
+          </div>
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-input">
+          <div class="input-box" id="inputBox">输入消息，或点击右侧“复制话术”后粘贴发送……</div>
+          <div class="input-actions">
+            <span>AI建议可由顾问编辑后发送，发送内容将自动留痕。</span>
+            <button class="btn btn-primary btn-mini" onclick="sendCopiedText()">发送</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidebar-panel">
+        <div class="side-header">
+          <div class="side-title-row">
+            <div>
+              <div class="side-title">AI机会提示</div>
+              <div class="side-sub" id="sideSub">当前客户：A科技有限公司</div>
+            </div>
+            <span class="badge badge-high" id="priorityBadge">高推荐</span>
+          </div>
+          <div class="tabs">
+            <div class="tab active" data-tab="opp" onclick="switchTab('opp')">机会</div>
+            <div class="tab" data-tab="profile" onclick="switchTab('profile')">画像</div>
+            <div class="tab" data-tab="record" onclick="switchTab('record')">记录</div>
+          </div>
+        </div>
+        <div class="side-body">
+          <div class="status-banner status-success" id="feedbackBanner"></div>
+
+          <div class="panel-tab active" id="tab-opp">
+            <div class="opportunity-card">
+              <div class="opp-head">
+                <div>
+                  <div class="opp-title" id="oppTitle">高新申报评估机会</div>
+                  <div class="side-sub" id="oppSource">来源：企业数据 + 财税数据 + 聊天记录</div>
+                </div>
+                <div class="opp-score"><div><strong id="oppScore">92</strong><span>匹配度</span></div></div>
+              </div>
+              <div class="reason-list" id="reasonList"></div>
+              <div class="suggestion" id="aiTalk"></div>
+              <div class="action-grid">
+                <button class="btn btn-primary full" onclick="copyTalk()">复制AI话术</button>
+                <button class="btn btn-green" onclick="markFeedback('已联系 - 有兴趣')">已联系-有兴趣</button>
+                <button class="btn btn-secondary" onclick="markFeedback('已联系 - 暂无需求')">已联系-暂无需求</button>
+                <button class="btn btn-orange" onclick="setReminder()">稍后提醒</button>
+                <button class="btn btn-secondary" onclick="transferSales()">转销售跟进</button>
+                <button class="btn btn-secondary full" onclick="openReasonDrawer()">查看规则命中详情</button>
+              </div>
+            </div>
+
+            <div class="section-title">其他可能机会 <span class="side-sub">按匹配度排序</span></div>
+            <div id="otherOpps"></div>
+          </div>
+
+          <div class="panel-tab" id="tab-profile">
+            <div class="section-title">客户画像</div>
+            <table class="info-table" id="profileTable"></table>
+            <div class="section-title">标签</div>
+            <div class="tag-row" id="tagRow"></div>
+            <div class="section-title">近期聊天识别</div>
+            <div class="suggestion" id="chatInsight"></div>
+          </div>
+
+          <div class="panel-tab" id="tab-record">
+            <div class="section-title">跟进记录</div>
+            <div class="timeline" id="timeline"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <span>规则命中详情</span>
+      <span style="color:#2563eb;cursor:pointer;" onclick="closeDrawer()">关闭</span>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </div>
+
+  <div class="toast" id="toast">操作成功</div>
+
+  <script>
+    const customers = [
+      {
+        id: 'tech', name: 'A科技有限公司服务群', short: 'A科技有限公司', avatar: '科', priority: '高推荐', priorityClass: 'badge-high', type: 'high today',
+        meta: '高新申报 · 匹配度92 · 今日建议', score: 92, opp: '高新申报评估机会', source: '企业数据 + 财税数据 + 聊天记录',
+        reasons: ['行业为软件开发，属于高新申报常见行业', '经营范围包含“技术开发、软件开发”', '存在研发费用 18.6 万，且近12个月收入较高', '聊天中客户提到“今年研发项目比较多”'],
+        talk: '王总，看到贵司今年研发投入和技术服务业务都有增长，可以先做一次高新申报条件评估，判断是否具备申报基础。如果条件合适，我们可以帮您梳理研发费用、知识产权和申报材料。',
+        tags: ['高新潜客', '研发费用', '技术开发', '高营收', '今日建议'],
+        profile: [['行业', '软件开发'], ['近12个月收入', '860万'], ['研发费用', '18.6万'], ['知识产权', '2项'], ['服务状态', '在服客户'], ['当前顾问', '张三']],
+        chatInsight: '近30天聊天中出现“研发项目”“技术合同”“项目申报”等关键词，客户对政策类服务有潜在兴趣。',
+        chat: [
+          ['left', '王总', '张会计，我们今年有几个研发项目，后面做账这块需要注意什么吗？', '09:18'],
+          ['right', '顾问', '需要看下研发费用归集情况，我先帮您整理下今年相关科目。', '09:24'],
+          ['left', '王总', '另外有个软件著作权也在申请，这个和申报项目有关系吗？', '10:02'],
+          ['right', '顾问', '有关系的，知识产权可以作为后续项目申报或高新评估的基础材料之一。', '10:08']
+        ],
+        others: [['知识产权服务', 78], ['项目申报辅导', 72], ['研发费用归集', 68]],
+        records: [['AI生成机会', '命中高新申报规则，匹配度92', '今天 09:00'], ['顾问查看机会', '张三查看AI机会提示', '今天 09:32']]
+      },
+      {
+        id: 'trade', name: 'B商贸有限公司服务群', short: 'B商贸有限公司', avatar: '贸', priority: '中推荐', priorityClass: 'badge-mid', type: 'today',
+        meta: '涨价沟通 · 匹配度81 · 今日建议', score: 81, opp: '服务费涨价沟通机会', source: '服务数据 + 发票数据 + 咨询次数',
+        reasons: ['当前代账单价低于机构平均价', '近12个月凭证数和流水数显著增加', '客户咨询次数高于同类客户均值', '服务时长超过2年，具备价格调整基础'],
+        talk: '李总，您公司今年业务量和票据量都有明显增加，我们这边服务工作量也相应提升。建议近期一起复盘一下当前服务内容和费用标准，看是否需要升级到更匹配的服务套餐。',
+        tags: ['低价高耗', '可涨价客户', '高票量', '服务复杂度上升'],
+        profile: [['行业', '商贸批发'], ['当前单价', '260元/月'], ['机构均价', '420元/月'], ['近12个月凭证数', '1,246张'], ['咨询次数', '118次'], ['服务时长', '2年4个月']],
+        chatInsight: '近期客户频繁询问发票、库存、流水对账问题，服务复杂度明显上升。',
+        chat: [
+          ['left', '李总', '这个月发票比较多，库存这块你们还要我补什么？', '08:51'],
+          ['right', '顾问', '需要补一下出入库明细，还有几笔流水需要确认用途。', '09:05'],
+          ['left', '李总', '最近业务量上来了，后面可能每个月都差不多。', '09:12']
+        ],
+        others: [['库存规范服务', 73], ['财务规范化服务', 66], ['开票风险提醒', 58]],
+        records: [['AI生成机会', '命中可涨价规则，匹配度81', '今天 09:00']]
+      },
+      {
+        id: 'media', name: 'C传媒有限公司服务群', short: 'C传媒有限公司', avatar: '传', priority: '中推荐', priorityClass: 'badge-mid', type: 'today',
+        meta: '广告营销 · 匹配度76 · 今日建议', score: 76, opp: '数字营销服务机会', source: '发票关键词 + 往来科目',
+        reasons: ['近半年发票项目命中“信息流投放、品牌推广”', '供应商名称多次出现广告、传媒、网络科技', '客户具备外部服务采购习惯', '广告支出金额达到建议跟进阈值'],
+        talk: '赵总，看到贵司近期在信息流和品牌推广上有持续投入，如果您关注投放效果或获客成本，我们可以先帮您做一次营销投入梳理，看是否有优化空间。',
+        tags: ['广告投放客户', '营销预算', '外部服务采购', '中推荐'],
+        profile: [['行业', '文化传媒'], ['近半年营销类发票', '12张'], ['营销类金额', '42.8万'], ['最近命中', '2026-06-10'], ['供应商', '广告/网络科技类'], ['服务状态', '在服客户']],
+        chatInsight: '聊天中未直接表达营销需求，但票据数据体现持续广告投放行为。',
+        chat: [
+          ['left', '赵总', '上个月广告公司的票都到了吗？', '11:13'],
+          ['right', '顾问', '到了，信息流投放和品牌推广两张都已经采集。', '11:18']
+        ],
+        others: [['合同合规检查', 62], ['财务规范化', 55]],
+        records: [['AI生成机会', '命中广告营销规则，匹配度76', '今天 09:00']]
+      },
+      {
+        id: 'industry', name: 'D实业有限公司服务群', short: 'D实业有限公司', avatar: '实', priority: '低推荐', priorityClass: 'badge-low', type: 'all',
+        meta: '工商变更 · 匹配度64', score: 64, opp: '工商变更跟进机会', source: '聊天关键词 + 工商数据',
+        reasons: ['聊天中出现“股东调整”关键词', '近期法人未变更，工商记录无同步变更', '客户可能处于变更前咨询阶段'],
+        talk: '周总，您之前提到股东调整，如果后续确定变更方案，可以提前准备股东会决议、章程修正案等材料，我们可以协助您评估办理流程。',
+        tags: ['工商变更意图', '聊天识别', '低推荐'],
+        profile: [['行业', '实业投资'], ['工商状态', '正常'], ['最近变更', '2025-12-08'], ['聊天关键词', '股东调整'], ['服务状态', '在服客户']],
+        chatInsight: '聊天中出现一次“股东调整”，需要顾问人工确认真实性。',
+        chat: [
+          ['left', '周总', '如果后面股东调整，流程麻烦吗？', '16:42'],
+          ['right', '顾问', '要看调整方式和股权比例，确定后我可以帮您看下材料。', '16:51']
+        ],
+        others: [['章程变更', 58], ['税务登记同步', 52]],
+        records: [['AI生成机会', '命中工商变更意图规则，匹配度64', '昨天 18:00']]
+      }
+    ];
+
+    let current = customers[0];
+    let copiedText = '';
+
+    function init() {
+      renderCustomerList(customers);
+      selectCustomer('tech');
+    }
+
+    function renderCustomerList(list) {
+      const wrap = document.getElementById('customerList');
+      wrap.innerHTML = '';
+      list.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'customer-card' + (c.id === current.id ? ' active' : '');
+        div.onclick = () => selectCustomer(c.id);
+        div.innerHTML = `
+          <div class="cust-top">
+            <div class="cust-name">${c.short}</div>
+            <span class="badge ${c.priorityClass}">${c.priority}</span>
+          </div>
+          <div class="cust-meta">${c.meta}</div>
+        `;
+        wrap.appendChild(div);
+      });
+    }
+
+    function filterCustomers(type, btn) {
+      document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (type === 'all') renderCustomerList(customers);
+      if (type === 'high') renderCustomerList(customers.filter(c => c.type.includes('high')));
+      if (type === 'today') renderCustomerList(customers.filter(c => c.type.includes('today')));
+      showToast('已切换筛选：' + btn.textContent);
+    }
+
+    function selectCustomer(id) {
+      current = customers.find(c => c.id === id) || customers[0];
+      renderCustomerList(customers);
+      document.querySelectorAll('.customer-card').forEach((el, idx) => {
+        const data = customers[idx];
+        if (data && data.id === current.id) el.classList.add('active');
+      });
+      document.getElementById('companyAvatar').textContent = current.avatar;
+      document.getElementById('companyName').textContent = current.name;
+      document.getElementById('companySub').textContent = `顾问：张三 · 在服客户 · 近30天消息 ${current.chat.length * 21 + 2} 条`;
+      document.getElementById('sideSub').textContent = '当前客户：' + current.short;
+      document.getElementById('priorityBadge').textContent = current.priority;
+      document.getElementById('priorityBadge').className = 'badge ' + current.priorityClass;
+      document.getElementById('oppTitle').textContent = current.opp;
+      document.getElementById('oppScore').textContent = current.score;
+      document.getElementById('oppSource').textContent = '来源：' + current.source;
+      document.getElementById('aiTalk').textContent = current.talk;
+      document.getElementById('feedbackBanner').classList.remove('show');
+      copiedText = '';
+      renderReasons();
+      renderChat();
+      renderProfile();
+      renderOtherOpps();
+      renderTimeline();
+      switchTab('opp');
+    }
+
+    function renderReasons() {
+      const list = document.getElementById('reasonList');
+      list.innerHTML = '';
+      current.reasons.forEach((r, i) => {
+        const div = document.createElement('div');
+        div.className = 'reason';
+        div.innerHTML = `<span class="reason-dot">${i + 1}</span><span>${r}</span>`;
+        list.appendChild(div);
+      });
+    }
+
+    function renderChat() {
+      const body = document.getElementById('chatBody');
+      body.innerHTML = '<div class="day-divider">今天</div>';
+      current.chat.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'msg ' + (m[0] === 'right' ? 'right' : '');
+        const text = highlight(m[2]);
+        div.innerHTML = `
+          <div class="msg-avatar">${m[1].slice(0,1)}</div>
+          <div>
+            <div class="bubble">${text}</div>
+            <div class="msg-time">${m[3]}</div>
+          </div>
+        `;
+        body.appendChild(div);
+      });
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function highlight(text) {
+      const words = ['研发项目','软件著作权','股东调整','广告','信息流','品牌推广','业务量','研发费用','技术开发'];
+      let out = text;
+      words.forEach(w => out = out.replaceAll(w, `<span class="inline-highlight">${w}</span>`));
+      return out;
+    }
+
+    function renderProfile() {
+      const table = document.getElementById('profileTable');
+      table.innerHTML = current.profile.map(row => `<tr><td>${row[0]}</td><td>${row[1]}</td></tr>`).join('');
+      const tags = document.getElementById('tagRow');
+      tags.innerHTML = '';
+      current.tags.forEach((t, i) => {
+        const cls = ['blue','green','orange','purple'][i % 4];
+        const span = document.createElement('span');
+        span.className = 'tag ' + cls;
+        span.textContent = t;
+        tags.appendChild(span);
+      });
+      document.getElementById('chatInsight').textContent = current.chatInsight;
+    }
+
+    function renderOtherOpps() {
+      const wrap = document.getElementById('otherOpps');
+      wrap.innerHTML = current.others.map(o => `
+        <div class="sample-mini" style="border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-weight:700;">${o[0]}</div>
+          <span class="badge badge-blue">${o[1]}分</span>
+        </div>
+      `).join('');
+    }
+
+    function renderTimeline(extra) {
+      const wrap = document.getElementById('timeline');
+      const records = extra ? [[extra.type, extra.desc, '刚刚'], ...current.records] : current.records;
+      wrap.innerHTML = records.map((r, i) => `
+        <div class="timeline-item">
+          <div class="timeline-dot">${i + 1}</div>
+          <div class="timeline-content">
+            <strong>${r[0]}</strong><br/>${r[1]}
+            <div class="timeline-meta">${r[2]}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+      document.querySelectorAll('.panel-tab').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+    }
+
+    function copyTalk() {
+      copiedText = current.talk;
+      document.getElementById('inputBox').textContent = copiedText;
+      showToast('AI话术已复制到输入框，可编辑后发送');
+    }
+
+    function sendCopiedText() {
+      if (!copiedText) {
+        showToast('请先复制AI话术');
+        return;
+      }
+      current.chat.push(['right','顾问',copiedText,'刚刚']);
+      renderChat();
+      renderTimeline({ type: '顾问发送话术', desc: '已将AI建议话术发送给客户' });
+      showToast('已发送并自动留痕');
+    }
+
+    function markFeedback(text) {
+      const banner = document.getElementById('feedbackBanner');
+      banner.className = 'status-banner status-success show';
+      banner.textContent = '已记录反馈：' + text + '。该反馈将回流到规则效果看板。';
+      renderTimeline({ type: '顾问反馈', desc: text });
+      showToast('反馈已记录');
+    }
+
+    function setReminder() {
+      const banner = document.getElementById('feedbackBanner');
+      banner.className = 'status-banner status-warn show';
+      banner.textContent = '已设置稍后提醒：明天上午 10:00 再次提醒顾问跟进。';
+      renderTimeline({ type: '稍后提醒', desc: '明天上午10:00再次提醒' });
+      showToast('已设置稍后提醒');
+    }
+
+    function transferSales() {
+      const banner = document.getElementById('feedbackBanner');
+      banner.className = 'status-banner status-success show';
+      banner.textContent = '已转销售跟进：销售负责人将在行动清单中收到该客户。';
+      renderTimeline({ type: '转销售跟进', desc: '已转给销售负责人' });
+      showToast('已转销售跟进');
+    }
+
+    function openReasonDrawer() {
+      const body = document.getElementById('drawerBody');
+      body.innerHTML = `
+        <p><strong>命中规则：</strong>${current.opp}</p>
+        <p><strong>匹配度：</strong>${current.score}分</p>
+        <p><strong>来源：</strong>${current.source}</p>
+        <p><strong>命中依据：</strong></p>
+        <ul>${current.reasons.map(r => `<li>${r}</li>`).join('')}</ul>
+        <p><strong>建议：</strong>${current.talk}</p>
+      `;
+      document.getElementById('drawer').classList.add('show');
+    }
+
+    function closeDrawer() { document.getElementById('drawer').classList.remove('show'); }
+
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    init();
+  </script>
+</body>
+</html>
