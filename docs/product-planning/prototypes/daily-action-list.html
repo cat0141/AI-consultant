@@ -3,25 +3,25 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>企业微信行动卡片 - AI增长操作系统原型</title>
+<title>企业微信行动卡片 - 企业列表展开版</title>
 <style>
-:root{--bg:#eef2f7;--phone:#111827;--panel:#fff;--line:#e5e7eb;--text:#111827;--muted:#64748b;--blue:#2563eb;--blueSoft:#eef4ff;--green:#16a34a;--greenSoft:#ecfdf3;--orange:#f59e0b;--orangeSoft:#fff7e6;--red:#ef4444;--redSoft:#fff1f2;--shadow:0 18px 48px rgba(15,23,42,.12)}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#eef4ff,#f8fafc);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;color:var(--text)}.page{min-height:100vh;padding:28px}.title{max-width:1180px;margin:0 auto 22px}.title h1{margin:0 0 8px;font-size:26px}.title p{margin:0;color:#475569;line-height:1.7}.stage{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:390px 430px 1fr;gap:24px;align-items:start}.note{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(15,23,42,.06)}.note h2{font-size:18px;margin:0 0 10px}.note p{margin:0;color:#475569;line-height:1.75}.note ul{padding-left:18px;color:#475569;line-height:1.9}.phone{width:390px;height:790px;background:var(--phone);border-radius:42px;padding:14px;box-shadow:var(--shadow);position:relative}.screen{height:100%;background:#f3f4f6;border-radius:32px;overflow:hidden;display:flex;flex-direction:column}.status{height:30px;background:#f9fafb;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:12px;font-weight:700}.wechatTop{height:48px;background:#fff;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid #e5e7eb}.back{font-size:22px}.topName{font-weight:800}.chatArea{flex:1;padding:14px;overflow:auto;background:#eef2f7}.time{font-size:12px;color:#94a3b8;text-align:center;margin:8px 0 14px}.msg{display:flex;gap:8px;margin-bottom:14px}.avatar{width:34px;height:34px;border-radius:10px;background:#2563eb;color:#fff;display:grid;place-items:center;font-weight:800;flex-shrink:0}.bubble{max-width:300px;background:#fff;border-radius:12px;padding:12px;box-shadow:0 4px 12px rgba(15,23,42,.06)}.bubbleTitle{font-weight:900;margin-bottom:6px}.bubbleText{font-size:13px;color:#475569;line-height:1.6}.miniCard{margin-top:10px;border:1px solid #dbeafe;border-radius:14px;overflow:hidden;background:#fff}.miniHead{background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;padding:12px}.miniHead b{display:block;font-size:15px}.miniHead span{font-size:12px;opacity:.85}.miniBody{padding:12px}.row{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;font-size:13px}.label{color:#64748b}.value{font-weight:800}.btn{border:0;border-radius:11px;height:34px;padding:0 12px;font-weight:800;cursor:pointer;font-family:inherit}.primary{background:#2563eb;color:#fff}.soft{background:#eaf1ff;color:#2563eb}.ghost{background:#f1f5f9;color:#334155}.green{background:#16a34a;color:#fff}.orange{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}.openBtn{width:100%;margin-top:8px}.appTop{height:52px;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;border-bottom:1px solid #e5e7eb;position:relative}.close{position:absolute;left:14px;color:#64748b}.miniPage{flex:1;overflow:auto;padding:14px;background:#f8fafc}.summary{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:14px;margin-bottom:12px}.cust{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.custName{font-size:18px;font-weight:900}.tag{display:inline-flex;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:800}.high{background:var(--redSoft);color:#dc2626}.mid{background:var(--orangeSoft);color:#b45309}.reason{display:flex;gap:8px;margin:9px 0;color:#334155;font-size:13px;line-height:1.55}.dot{width:18px;height:18px;border-radius:50%;background:#eaf1ff;color:#2563eb;display:grid;place-items:center;font-size:11px;font-weight:900;flex-shrink:0;margin-top:1px}.talk{background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe;border-radius:14px;padding:12px;line-height:1.7;font-size:13px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.wide{grid-column:1/-1}.list{display:grid;gap:10px}.item{background:#fff;border:1px solid #e5e7eb;border-radius:15px;padding:12px;cursor:pointer}.item.active{border-color:#93c5fd;background:#f8fbff}.itemTop{display:flex;justify-content:space-between;gap:8px}.itemName{font-weight:900}.itemSub{font-size:12px;color:#64748b;margin-top:5px;line-height:1.5}.toast{position:fixed;left:50%;top:22px;transform:translateX(-50%) translateY(-20px);opacity:0;background:#0f172a;color:#fff;padding:12px 16px;border-radius:999px;box-shadow:var(--shadow);transition:.2s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}@media(max-width:1180px){.stage{grid-template-columns:1fr}.phone{margin:auto}.note{max-width:430px;margin:auto}}
+:root{--bg:#eef2f7;--phone:#111827;--panel:#fff;--line:#e5e7eb;--text:#111827;--muted:#64748b;--blue:#2563eb;--blueSoft:#eef4ff;--green:#16a34a;--greenSoft:#ecfdf3;--orange:#f59e0b;--orangeSoft:#fff7e6;--red:#ef4444;--redSoft:#fff1f2;--purple:#7c3aed;--purpleSoft:#f3edff;--shadow:0 18px 48px rgba(15,23,42,.12)}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#eef4ff,#f8fafc);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;color:var(--text)}.page{min-height:100vh;padding:28px}.title{max-width:1180px;margin:0 auto 22px}.title h1{margin:0 0 8px;font-size:26px}.title p{margin:0;color:#475569;line-height:1.7}.stage{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:360px 390px 430px;gap:24px;align-items:start}.note{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(15,23,42,.06)}.note h2{font-size:18px;margin:0 0 10px}.note ul{padding-left:18px;color:#475569;line-height:1.9}.phone{width:390px;height:790px;background:var(--phone);border-radius:42px;padding:14px;box-shadow:var(--shadow);position:relative}.screen{height:100%;background:#f3f4f6;border-radius:32px;overflow:hidden;display:flex;flex-direction:column}.status{height:30px;background:#f9fafb;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:12px;font-weight:700}.wechatTop{height:48px;background:#fff;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid #e5e7eb}.back{font-size:22px}.topName{font-weight:800}.chatArea{flex:1;padding:14px;overflow:auto;background:#eef2f7}.time{font-size:12px;color:#94a3b8;text-align:center;margin:8px 0 14px}.msg{display:flex;gap:8px;margin-bottom:14px}.avatar{width:34px;height:34px;border-radius:10px;background:#2563eb;color:#fff;display:grid;place-items:center;font-weight:800;flex-shrink:0}.bubble{max-width:300px;background:#fff;border-radius:12px;padding:12px;box-shadow:0 4px 12px rgba(15,23,42,.06)}.bubbleTitle{font-weight:900;margin-bottom:6px}.bubbleText{font-size:13px;color:#475569;line-height:1.6}.miniCard{margin-top:10px;border:1px solid #dbeafe;border-radius:14px;overflow:hidden;background:#fff}.miniHead{background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;padding:12px}.miniHead b{display:block;font-size:15px}.miniHead span{font-size:12px;opacity:.85}.miniBody{padding:12px}.row{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;font-size:13px}.label{color:#64748b}.value{font-weight:800}.btn{border:0;border-radius:11px;height:34px;padding:0 12px;font-weight:800;cursor:pointer;font-family:inherit}.primary{background:#2563eb;color:#fff}.soft{background:#eaf1ff;color:#2563eb}.ghost{background:#f1f5f9;color:#334155}.green{background:#16a34a;color:#fff}.orange{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}.openBtn{width:100%;margin-top:8px}.appTop{height:52px;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;border-bottom:1px solid #e5e7eb;position:relative}.close{position:absolute;left:14px;color:#64748b}.miniPage{flex:1;overflow:auto;padding:12px;background:#f8fafc}.summary{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:12px;margin-bottom:10px}.summaryTop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.summaryTitle{font-weight:900}.summarySub{font-size:12px;color:#64748b;margin-top:4px;line-height:1.5}.summaryStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.stat{background:#f8fafc;border-radius:12px;padding:8px;text-align:center}.stat b{display:block;font-size:18px}.stat span{font-size:11px;color:#64748b}.enterpriseList{display:grid;gap:9px}.enterprise{background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden}.enterprise.active{border-color:#93c5fd;box-shadow:0 8px 20px rgba(37,99,235,.08)}.enterpriseHead{padding:12px;cursor:pointer}.enterpriseTop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.enterpriseName{font-weight:900;font-size:15px}.enterpriseMeta{font-size:12px;color:#64748b;margin-top:4px;line-height:1.45}.tag{display:inline-flex;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:800}.high{background:var(--redSoft);color:#dc2626}.mid{background:var(--orangeSoft);color:#b45309}.low{background:var(--greenSoft);color:#16a34a}.countPill{background:#f1f5f9;color:#475569;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:800}.enterpriseBody{display:none;border-top:1px solid #edf0f5;padding:10px 12px 12px}.enterprise.active .enterpriseBody{display:block}.suggestion{border:1px solid #edf0f5;border-radius:14px;padding:10px;margin-bottom:9px;background:#fbfdff}.suggestion:last-child{margin-bottom:0}.sugTop{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.sugName{font-weight:900}.sugReason{font-size:12px;color:#64748b;line-height:1.55;margin-top:6px}.talk{background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe;border-radius:12px;padding:9px;line-height:1.6;font-size:12px;margin-top:8px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.wide{grid-column:1/-1}.toast{position:fixed;left:50%;top:22px;transform:translateX(-50%) translateY(-20px);opacity:0;background:#0f172a;color:#fff;padding:12px 16px;border-radius:999px;box-shadow:var(--shadow);transition:.2s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}@media(max-width:1180px){.stage{grid-template-columns:1fr}.phone{margin:auto}.note{max-width:430px;margin:auto}}
 </style>
 </head>
 <body>
 <div class="page">
   <div class="title">
-    <h1>每日行动建议：企业微信卡片 + 小程序</h1>
-    <p>实际使用人是顾问，入口放在手机端。系统每天把建议客户发成企微卡片，顾问点开小程序查看原因、复制话术、做轻量反馈。</p>
+    <h1>每日行动建议：企业微信卡片 + 企业列表小程序</h1>
+    <p>当企业很多、且一家企业有多个建议时，手机端用“企业列表 + 单企业展开”更清晰。点击一家企业展开，其他企业自动收起。</p>
   </div>
   <div class="stage">
     <div class="note">
-      <h2>设计原则</h2>
+      <h2>这版解决的问题</h2>
       <ul>
-        <li>顾问不用主动打开后台找商机。</li>
-        <li>每张卡片只讲一件事：今天建议联系谁、为什么、说什么。</li>
-        <li>反馈按钮足够轻：有兴趣、暂无需求、稍后提醒、不适合。</li>
-        <li>不展示复杂规则配置，规则依据放在“查看原因”里。</li>
+        <li>一家企业可以有多个建议，不再强行一条客户一张卡。</li>
+        <li>很多企业时，默认只看企业列表，减少信息噪音。</li>
+        <li>点击企业后展开详情，同时自动收起其他企业。</li>
+        <li>顾问在手机上只做轻动作：复制话术、稍后提醒、标记结果。</li>
       </ul>
     </div>
 
@@ -34,21 +34,21 @@
           <div class="msg">
             <div class="avatar">AI</div>
             <div class="bubble">
-              <div class="bubbleTitle">今日建议跟进 4 位客户</div>
-              <div class="bubbleText">优先看高推荐客户。点开卡片后可直接复制话术，联系后点一下反馈即可。</div>
+              <div class="bubbleTitle">今日建议查看 6 家企业</div>
+              <div class="bubbleText">其中 2 家高推荐，3 家中推荐。点开后按企业查看，每家企业可能有多个建议。</div>
               <div class="miniCard">
-                <div class="miniHead"><b>今日客户经营建议</b><span>2个高推荐 · 2个中推荐</span></div>
+                <div class="miniHead"><b>今日客户经营建议</b><span>6家企业 · 11条建议</span></div>
                 <div class="miniBody">
-                  <div class="row"><span class="label">高新评估</span><span class="value">A科技有限公司</span></div>
-                  <div class="row"><span class="label">涨价沟通</span><span class="value">B商贸有限公司</span></div>
-                  <div class="row"><span class="label">营销服务</span><span class="value">C传媒有限公司</span></div>
-                  <button class="btn primary openBtn" onclick="selectItem(0);toast('已打开小程序卡片')">打开查看</button>
+                  <div class="row"><span class="label">高推荐</span><span class="value">A科技、B商贸</span></div>
+                  <div class="row"><span class="label">建议类型</span><span class="value">高新 / 涨价 / 工商</span></div>
+                  <div class="row"><span class="label">处理方式</span><span class="value">点开企业逐个看</span></div>
+                  <button class="btn primary openBtn" onclick="toast('已打开企业列表小程序')">打开查看</button>
                 </div>
               </div>
             </div>
           </div>
           <div class="time">昨天</div>
-          <div class="msg"><div class="avatar">AI</div><div class="bubble"><div class="bubbleText">昨天 3 位客户已完成反馈，其中 1 位标记为“有兴趣”。</div></div></div>
+          <div class="msg"><div class="avatar">AI</div><div class="bubble"><div class="bubbleText">昨天 4 家企业已查看，2 条建议被标记为“有兴趣”。</div></div></div>
         </div>
       </div>
     </div>
@@ -56,13 +56,16 @@
     <div class="phone">
       <div class="screen">
         <div class="status"><span>09:31</span><span>5G 100%</span></div>
-        <div class="appTop"><span class="close">关闭</span>今日行动建议</div>
+        <div class="appTop"><span class="close">关闭</span>今日建议</div>
         <div class="miniPage">
-          <div class="summary" id="detail"></div>
           <div class="summary">
-            <div style="font-weight:900;margin-bottom:10px">今天建议</div>
-            <div class="list" id="list"></div>
+            <div class="summaryTop">
+              <div><div class="summaryTitle">今天建议查看</div><div class="summarySub">先看高推荐企业；一家企业可能有多条建议。</div></div>
+              <span class="tag high">2家高推荐</span>
+            </div>
+            <div class="summaryStats"><div class="stat"><b>6</b><span>企业</span></div><div class="stat"><b>11</b><span>建议</span></div><div class="stat"><b>3</b><span>建议类型</span></div></div>
           </div>
+          <div class="enterpriseList" id="enterpriseList"></div>
         </div>
       </div>
     </div>
@@ -70,12 +73,29 @@
 </div>
 <div class="toast" id="toast"></div>
 <script>
-const data=[
-{name:'A科技有限公司',scene:'高新申报评估',level:'高',reason:['软件开发行业','经营范围含技术开发','存在研发费用18.6万','聊天提到研发项目'],talk:'王总，看到贵司今年研发投入和技术服务业务都有增长，可以先做一次高新申报条件评估，判断是否具备申报基础。'},
-{name:'B商贸有限公司',scene:'服务费涨价沟通',level:'高',reason:['当前代账单价低于机构均价','近12个月凭证数明显增加','客户咨询次数较高'],talk:'李总，您公司今年业务量和票据量都有明显增加，我们这边服务工作量也相应提升，建议近期一起复盘一下当前服务内容和费用标准。'},
-{name:'C传媒有限公司',scene:'数字营销服务',level:'中',reason:['发票命中信息流投放','近半年营销类发票42.8万','供应商多为广告公司'],talk:'赵总，看到贵司近期在信息流和品牌推广上有持续投入，如果关注投放效果或获客成本，我们可以先帮您做一次营销投入梳理。'},
-{name:'D实业有限公司',scene:'工商变更确认',level:'中',reason:['聊天中提到股东调整','工商记录暂无同步变更'],talk:'周总，您之前提到股东调整，如果后续确定变更方案，可以提前准备材料，我们可以协助您评估办理流程。'}
-];let cur=0;function cls(l){return l==='高'?'high':'mid'}function render(){const d=data[cur];document.getElementById('detail').innerHTML=`<div class='cust'><div><div class='custName'>${d.name}</div><div style='color:#64748b;font-size:12px;margin-top:5px'>${d.scene}</div></div><span class='tag ${cls(d.level)}'>${d.level}推荐</span></div><div style='font-weight:900;margin-top:14px'>为什么建议联系</div>${d.reason.map((r,i)=>`<div class='reason'><span class='dot'>${i+1}</span><span>${r}</span></div>`).join('')}<div style='font-weight:900;margin:14px 0 8px'>建议话术</div><div class='talk'>${d.talk}</div><div class='actions'><button class='btn primary wide' onclick='toast("话术已复制，可粘贴到客户群")'>复制话术</button><button class='btn green' onclick='toast("已记录：有兴趣")'>有兴趣</button><button class='btn soft' onclick='toast("已记录：暂无需求")'>暂无需求</button><button class='btn orange' onclick='toast("已设置明天提醒")'>稍后提醒</button><button class='btn ghost' onclick='toast("已标记：不适合")'>不适合</button></div>`;document.getElementById('list').innerHTML=data.map((x,i)=>`<div class='item ${i===cur?'active':''}' onclick='selectItem(${i})'><div class='itemTop'><div class='itemName'>${x.name}</div><span class='tag ${cls(x.level)}'>${x.level}</span></div><div class='itemSub'>${x.scene} · ${x.reason[0]}</div></div>`).join('')}function selectItem(i){cur=i;render()}function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}render();
+const enterprises=[
+{name:'A科技有限公司',level:'高',meta:'软件开发 · 顾问：张三',suggestions:[
+{type:'高新申报评估',level:'高',reason:'软件开发行业；有研发费用18.6万；聊天中提到研发项目。',talk:'王总，看到贵司今年研发投入和技术服务业务都有增长，可以先做一次高新申报条件评估。'},
+{type:'知识产权服务',level:'中',reason:'客户提到软件著作权，且已有技术服务发票。',talk:'王总，软件著作权可以作为后续项目申报的基础材料，我们可以先帮您看下现有材料是否完整。'}]},
+{name:'B商贸有限公司',level:'高',meta:'商贸批发 · 顾问：张三',suggestions:[
+{type:'服务费涨价沟通',level:'高',reason:'当前收费低于机构均价；凭证和流水明显增加。',talk:'李总，您公司今年业务量和票据量都有明显增加，建议近期一起复盘服务内容和费用标准。'},
+{type:'库存规范服务',level:'中',reason:'近期多次询问库存和出入库明细。',talk:'李总，近期库存相关资料比较多，可以先做一次库存资料规范梳理。'}]},
+{name:'C传媒有限公司',level:'中',meta:'文化传媒 · 顾问：王五',suggestions:[
+{type:'数字营销服务',level:'中',reason:'近半年营销类发票42.8万，供应商多为广告公司。',talk:'赵总，看到贵司近期有广告投放，如果关注投放效果，我们可以先帮您做一次营销投入梳理。'}]},
+{name:'D实业有限公司',level:'中',meta:'实业投资 · 顾问：王五',suggestions:[
+{type:'工商变更咨询',level:'中',reason:'聊天中提到股东调整，工商记录暂无同步变更。',talk:'周总，您之前提到股东调整，如果后续确定方案，可以提前准备材料。'}]},
+{name:'E环保设备公司',level:'中',meta:'环保设备 · 顾问：李四',suggestions:[
+{type:'高新申报评估',level:'中',reason:'环保设备制造；有专利相关发票；存在研发线索。',talk:'王总，环保设备类企业如果有研发项目和知识产权，可以先做一次高新申报条件评估。'},
+{type:'项目申报辅导',level:'中',reason:'行业符合部分补贴政策关注方向。',talk:'王总，您这个行业后续可能有项目申报机会，可以先关注政策条件。'}]},
+{name:'F餐饮管理公司',level:'低',meta:'餐饮服务 · 顾问：李四',suggestions:[
+{type:'服务套餐升级',level:'低',reason:'流水增加，但当前规则证据不够强。',talk:'这家客户先不主动打扰，可等客户有明确服务压力时再沟通。'}]}
+];
+let openIndex=0;
+function levelCls(l){return l==='高'?'high':l==='中'?'mid':'low'}
+function render(){document.getElementById('enterpriseList').innerHTML=enterprises.map((e,i)=>`<div class='enterprise ${i===openIndex?'active':''}'><div class='enterpriseHead' onclick='toggle(${i})'><div class='enterpriseTop'><div><div class='enterpriseName'>${e.name}</div><div class='enterpriseMeta'>${e.meta}</div></div><div style='display:grid;gap:6px;justify-items:end'><span class='tag ${levelCls(e.level)}'>${e.level}推荐</span><span class='countPill'>${e.suggestions.length}条建议</span></div></div></div><div class='enterpriseBody'>${e.suggestions.map(s=>`<div class='suggestion'><div class='sugTop'><div class='sugName'>${s.type}</div><span class='tag ${levelCls(s.level)}'>${s.level}</span></div><div class='sugReason'>${s.reason}</div><div class='talk'>${s.talk}</div><div class='actions'><button class='btn primary wide' onclick='toast("话术已复制")'>复制话术</button><button class='btn green' onclick='toast("已记录：有兴趣")'>有兴趣</button><button class='btn soft' onclick='toast("已记录：暂无需求")'>暂无需求</button><button class='btn orange' onclick='toast("已设置稍后提醒")'>稍后提醒</button><button class='btn ghost' onclick='toast("已标记：不适合")'>不适合</button></div></div>`).join('')}</div></div>`).join('')}
+function toggle(i){openIndex=openIndex===i?-1:i;render()}
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}
+render();
 </script>
 </body>
 </html>
