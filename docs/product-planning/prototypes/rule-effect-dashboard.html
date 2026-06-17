@@ -1,32 +1,52 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>规则效果看板</title>
 <style>
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei";background:#f5f7fb}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei";background:#f5f7fb;color:#111827}
 .wrap{padding:24px}
-.card{background:#fff;border-radius:16px;padding:16px;margin-bottom:14px;border:1px solid #e5e7eb}
+.hero{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:16px;margin-bottom:14px}
 .title{font-size:22px;font-weight:900}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.m{background:#f8fafc;padding:12px;border-radius:14px}
+.m{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:12px}
 .m b{font-size:22px}
+.section{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:16px;margin-top:14px}
+.row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-top:10px}
+.badge{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:800}
+.good{background:#ecfdf3;color:#16a34a}
+.mid{background:#fff7e7;color:#b45309}
+.low{background:#f1f5f9;color:#64748b}
 </style>
 </head>
 <body>
 <div class="wrap">
-<div class="card">
-<div class="title">规则效果总览</div>
+<div class="hero">
+<div class="title">规则效果看板</div>
+<div style="color:#64748b">关注规则是否“被用、被认可、被优化”，而不是成交结果</div>
 </div>
+
 <div class="grid">
-<div class="m"><b>12</b><div>已启用规则</div></div>
+<div class="m"><b>12</b><div>启用规则</div></div>
 <div class="m"><b>1,280</b><div>命中客户</div></div>
-<div class="m"><b>18%</b><div>平均转化率</div></div>
-<div class="m"><b>¥3.2M</b><div>预估贡献收入</div></div>
+<div class="m"><b>63%</b><div>顾问采纳率</div></div>
+<div class="m"><b>21%</b><div>正向反馈率</div></div>
 </div>
-<div class="card">
-<b>规则对比</b>
-<div style='margin-top:10px'>高新规则转化率最高，但覆盖较窄；涨价规则贡献收入最大。</div>
+
+<div class="section">
+<b>规则健康度</b>
+<div class="row">
+<div>高新申报 <span class="badge good">健康</span></div>
+<div>涨价规则 <span class="badge good">健康</span></div>
+<div>广告营销 <span class="badge mid">待优化</span></div>
+<div>工商变更 <span class="badge low">低使用</span></div>
+</div>
+</div>
+
+<div class="section">
+<b>优化建议</b>
+<p style="color:#64748b;line-height:1.7">建议优先优化“广告营销规则”，当前误判较高；工商变更规则使用率偏低，需要增强聊天信号权重。</p>
 </div>
 </div>
 </body>
