@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>每日行动建议清单</title>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei";background:#f5f7fb}
+.wrap{display:flex;min-height:100vh}
+.side{width:240px;background:#0f172a;color:#cbd5e1;padding:20px}
+.main{flex:1;padding:24px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;margin-bottom:14px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.05)}
+.title{font-size:22px;font-weight:900}
+.item{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #eee;padding:12px 0}
+.item:last-child{border-bottom:none}
+.badge{padding:4px 8px;border-radius:999px;font-size:12px;font-weight:800}
+.high{background:#fee2e2;color:#dc2626}
+.mid{background:#fef3c7;color:#b45309}
+.low{background:#dcfce7;color:#16a34a}
+.btn{border:none;border-radius:10px;padding:6px 10px;cursor:pointer}
+.primary{background:#2563eb;color:#fff}
+.soft{background:#eaf1ff;color:#2563eb}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="side">AI增长OS</div>
+<div class="main">
+<div class="card">
+<div class="title">今日行动建议</div>
+</div>
+<div id="list"></div>
+</div>
+</div>
+<script>
+const data=[
+{name:'A科技有限公司',level:'高',task:'联系高新申报评估',score:92},
+{name:'B商贸有限公司',level:'高',task:'发起涨价沟通',score:88},
+{name:'C传媒有限公司',level:'中',task:'确认广告投放情况',score:76},
+{name:'D实业有限公司',level:'中',task:'核实工商变更意向',score:68}
+];
+function render(){document.getElementById('list').innerHTML=data.map(x=>`<div class='card item'><div><b>${x.name}</b><div style='color:#64748b;font-size:12px'>任务：${x.task}</div></div><div><span class='badge ${x.level==='高'?'high':x.level==='中'?'mid':'low'}'>${x.level}推荐</span><div style='margin-top:6px'><button class='btn soft' onclick="alert('已打开客户')">查看</button></div></div></div>`).join('')}render();
+</script>
+</body>
+</html>
