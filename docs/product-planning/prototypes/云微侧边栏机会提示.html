@@ -3,74 +3,224 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>云微侧边栏 - 企业微信电脑端对话原型</title>
+<title>企业微信风格 - 云微侧边栏机会提示</title>
 <style>
-:root{--bg:#eef1f5;--nav:#e9edf3;--panel:#fff;--chat:#f5f6f8;--line:#e5e7eb;--text:#111827;--muted:#64748b;--blue:#2563eb;--blueSoft:#eef4ff;--green:#16a34a;--greenSoft:#ecfdf3;--orange:#f59e0b;--orangeSoft:#fff7e6;--red:#ef4444;--redSoft:#fff1f2;--purple:#7c3aed;--purpleSoft:#f3edff;--shadow:0 16px 42px rgba(15,23,42,.10)}*{box-sizing:border-box}body{margin:0;background:#dfe5ed;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;color:var(--text);font-size:14px}.desktop{height:100vh;display:grid;grid-template-columns:64px 280px minmax(520px,1fr) 340px;background:#fff;overflow:hidden}.appRail{background:#e9edf3;border-right:1px solid #d8dee8;display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:12px}.avatar{width:36px;height:36px;border-radius:10px;background:#2563eb;color:#fff;display:grid;place-items:center;font-weight:900;margin-bottom:10px}.railIcon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;color:#475569;cursor:pointer;font-size:18px}.railIcon.active{background:#fff;color:#2563eb;box-shadow:0 4px 12px rgba(15,23,42,.07)}.railSpace{flex:1}.chatList{background:#f7f8fa;border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0}.listTop{height:58px;padding:12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}.search{flex:1;height:34px;background:#fff;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;color:#94a3b8;padding:0 10px;font-size:13px}.plus{width:34px;height:34px;border-radius:8px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;cursor:pointer}.sessions{flex:1;overflow:auto;padding:8px}.session{height:72px;border-radius:10px;display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;padding:8px;cursor:pointer;margin-bottom:4px}.session:hover{background:#fff}.session.active{background:#fff;box-shadow:0 3px 10px rgba(15,23,42,.05)}.sAvatar{width:42px;height:42px;border-radius:10px;background:#dbeafe;color:#1d4ed8;display:grid;place-items:center;font-weight:900}.sName{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sMsg{font-size:12px;color:#64748b;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sTime{font-size:11px;color:#94a3b8;align-self:start;margin-top:4px}.chat{display:flex;flex-direction:column;background:var(--chat);min-width:0}.chatTop{height:58px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px}.chatName{font-weight:900;font-size:16px}.chatSub{font-size:12px;color:#64748b;margin-top:3px}.topTools{display:flex;gap:8px;color:#64748b}.tool{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;cursor:pointer}.tool:hover{background:#f1f5f9}.chatBody{flex:1;overflow:auto;padding:22px 26px}.date{text-align:center;color:#94a3b8;font-size:12px;margin:6px 0 18px}.msg{display:flex;gap:10px;margin-bottom:16px;align-items:flex-start}.msg.me{justify-content:flex-end}.mAvatar{width:34px;height:34px;border-radius:8px;background:#e2e8f0;color:#475569;display:grid;place-items:center;font-weight:900;flex-shrink:0}.msg.me .mAvatar{order:2;background:#dbeafe;color:#1d4ed8}.bubble{max-width:68%;background:#fff;border:1px solid #edf0f5;border-radius:8px;padding:10px 12px;line-height:1.65;box-shadow:0 2px 8px rgba(15,23,42,.035)}.msg.me .bubble{background:#dbeafe;border-color:#bfdbfe}.highlight{background:#fff7ed;color:#c2410c;border-radius:4px;padding:1px 3px;font-weight:800}.msgTime{font-size:11px;color:#94a3b8;margin-top:4px}.inputArea{height:148px;background:#fff;border-top:1px solid var(--line);display:flex;flex-direction:column}.inputTools{height:36px;display:flex;align-items:center;gap:12px;padding:0 16px;color:#64748b;border-bottom:1px solid #f1f5f9}.editor{flex:1;padding:12px 16px;color:#64748b;line-height:1.6;outline:none}.sendRow{height:40px;display:flex;align-items:center;justify-content:flex-end;padding:0 14px}.btn{border:1px solid transparent;border-radius:8px;height:32px;padding:0 12px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-weight:800;font-family:inherit;white-space:nowrap}.primary{background:#2563eb;color:#fff}.secondary{background:#fff;border-color:var(--line);color:#334155}.soft{background:#eef4ff;color:#2563eb}.green{background:#16a34a;color:#fff}.side{background:#fff;border-left:1px solid var(--line);display:flex;flex-direction:column;min-width:0}.sideTop{height:58px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 14px}.sideTitle{font-weight:900}.sideClose{color:#94a3b8;cursor:pointer}.sideBody{flex:1;overflow:auto;padding:14px}.miniTabs{display:flex;gap:4px;background:#f1f5f9;border-radius:10px;padding:4px;margin-bottom:12px}.tab{flex:1;text-align:center;padding:7px 4px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;color:#64748b}.tab.active{background:#fff;color:#2563eb;box-shadow:0 3px 10px rgba(15,23,42,.06)}.panel{display:none}.panel.active{display:block}.customerCard{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;margin-bottom:12px}.cTop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.cName{font-weight:900;line-height:1.35}.cMeta{font-size:12px;color:#64748b;margin-top:4px;line-height:1.5}.badge{display:inline-flex;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:900;white-space:nowrap}.red{background:var(--redSoft);color:#dc2626}.orange{background:var(--orangeSoft);color:#b45309}.blue{background:var(--blueSoft);color:#2563eb}.greenB{background:var(--greenSoft);color:#16a34a}.section{font-weight:900;margin:16px 0 8px}.opportunity{border:1px solid #bfdbfe;background:#f8fbff;border-radius:14px;padding:12px;margin-bottom:10px}.oppHead{display:flex;justify-content:space-between;gap:8px}.oppName{font-weight:900}.oppReason{font-size:12px;color:#475569;line-height:1.6;margin-top:8px}.evidence{display:grid;gap:8px}.evi{border:1px solid #edf0f5;background:#fff;border-radius:12px;padding:9px;line-height:1.55;font-size:12px}.evi b{display:block;margin-bottom:3px;color:#334155}.talk{background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe;border-radius:12px;padding:10px;line-height:1.65;font-size:13px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.wide{grid-column:1/-1}.infoTable{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}.infoTable td{padding:9px;border-bottom:1px solid #edf0f5;line-height:1.5;font-size:12px}.infoTable tr:last-child td{border-bottom:0}.infoTable td:first-child{background:#f8fafc;color:#64748b;width:82px}.toast{position:fixed;left:50%;top:22px;transform:translateX(-50%) translateY(-20px);opacity:0;background:#0f172a;color:#fff;padding:12px 16px;border-radius:999px;box-shadow:var(--shadow);transition:.2s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}@media(max-width:1080px){.desktop{grid-template-columns:56px 260px 1fr}.side{position:fixed;right:0;top:0;bottom:0;width:340px;box-shadow:-16px 0 38px rgba(15,23,42,.16);z-index:10}}
+  :root{
+    --bg:#f3f4f6;--panel:#fff;--line:#e5e7eb;--text:#111827;--muted:#6b7280;
+    --blue:#3b82f6;--green:#22c55e;--soft:#eff6ff;--soft2:#f8fafc;--deep:#2563eb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#eef2f7;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text)}
+  .shell{height:100vh;display:grid;grid-template-columns:72px 236px minmax(520px,1fr) 338px;overflow:hidden;background:#f5f6f8}
+  .appbar{background:#f3f4f6;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:12px}
+  .appicon{width:42px;height:42px;border-radius:12px;background:#fff;border:1px solid #e6e8ee;display:grid;place-items:center;font-size:20px;color:#475569;position:relative}
+  .appicon.active{background:linear-gradient(180deg,#4f8cff,#2f6ef2);color:#fff;border-color:#4f8cff;box-shadow:0 8px 20px rgba(47,110,242,.25)}
+  .dot{position:absolute;right:-2px;top:-3px;min-width:18px;height:18px;border-radius:999px;background:#ef4444;color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;padding:0 4px}
+  .side{background:#f7f8fa;border-right:1px solid var(--line);display:flex;flex-direction:column}
+  .search{padding:8px 10px;display:flex;gap:8px;align-items:center}
+  .searchbox{flex:1;height:34px;border-radius:8px;background:#eef1f5;border:1px solid #e5e7eb;display:flex;align-items:center;padding:0 12px;color:#94a3b8}
+  .addbtn{width:34px;height:34px;border-radius:8px;background:#eef1f5;border:1px solid #e5e7eb;display:grid;place-items:center;font-size:22px;color:#6b7280}
+  .sessionlist{flex:1;overflow:auto;padding:6px}
+  .session{display:grid;grid-template-columns:48px 1fr 46px;gap:10px;padding:10px 8px;border-radius:10px;cursor:pointer;align-items:center}
+  .session:hover{background:#eef2f7}
+  .session.active{background:linear-gradient(180deg,#4f8cff,#3b82f6);color:#fff}
+  .avatar{width:48px;height:48px;border-radius:10px;background:#dbeafe;background-size:cover;background-position:center;position:relative}
+  .tagnum{position:absolute;right:-4px;top:-4px;width:20px;height:20px;border-radius:999px;background:#ff5a5f;color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center}
+  .sname{font-weight:800;font-size:14px;line-height:1.2;display:flex;align-items:center;gap:4px}
+  .wx{color:#16a34a;font-weight:700;font-size:12px}
+  .spreview{font-size:12px;color:#6b7280;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .session.active .spreview,.session.active .stime,.session.active .wx{color:#eaf2ff}
+  .stime{font-size:12px;color:#94a3b8;text-align:right;align-self:start}
+  .chatwrap{display:flex;flex-direction:column;background:#fff}
+  .chathead{height:54px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#fbfbfc}
+  .title{font-size:15px;font-weight:800;display:flex;align-items:center;gap:6px}
+  .headicons{display:flex;gap:14px;color:#6b7280}
+  .chatbody{flex:1;overflow:auto;position:relative;padding:14px 0;background:#f5f6f8}
+  .watermark{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(-17deg, transparent 0 140px, rgba(148,163,184,.12) 140px 141px, transparent 141px 280px);opacity:.55}
+  .date{font-size:12px;color:#9ca3af;text-align:center;margin:6px 0 14px;position:relative;z-index:1}
+  .msg{position:relative;z-index:1;display:flex;gap:10px;padding:0 24px;margin-bottom:16px}
+  .msg.right{justify-content:flex-end}
+  .bubble{max-width:580px;padding:12px 14px;border-radius:8px;line-height:1.7;font-size:14px;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+  .bubble.gray{background:#fff;border:1px solid #eceef2}
+  .bubble.blue{background:#b8d9f4;border:1px solid #a8ccea}
+  .sysline{position:relative;z-index:1;text-align:center;color:#9ca3af;font-size:12px;margin:8px 0 16px}
+  .editor{height:160px;background:#fff;border-top:1px solid var(--line);display:flex;flex-direction:column}
+  .toolbar{height:46px;padding:0 16px;display:flex;align-items:center;gap:14px;color:#4b5563}
+  .toolbar .sep{margin-left:auto;color:#111827;font-weight:700}
+  .inputarea{flex:1;padding:0 16px 14px;color:#cbd5e1}
+  .sidebar{background:#f6f7fb;border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
+  .tabmenu{padding:14px 16px 8px;background:#fff;border-bottom:1px solid var(--line)}
+  .gridtabs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px;font-size:13px;color:#4b5563}
+  .gridtabs span{cursor:pointer;white-space:nowrap}
+  .gridtabs .active{font-weight:800;color:#111827;background:#f3f4f6;border-radius:6px;padding:6px 8px;text-align:center}
+  .sidebody{flex:1;overflow:auto;padding:0 12px 12px}
+  .custcard{margin-top:0;background:linear-gradient(180deg,#3878ff,#2563eb);border-radius:0 0 12px 12px;color:#fff;padding:10px 14px 14px;position:relative;overflow:hidden}
+  .custtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .custmini{font-size:12px;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 8px}
+  .custprofile{display:flex;gap:10px;align-items:center;margin:8px 0 12px}
+  .custavatar{width:44px;height:44px;border-radius:999px;background:#fff;background-size:cover;background-position:center;border:2px solid rgba(255,255,255,.75)}
+  .custname{font-size:18px;font-weight:800}
+  .custmeta{font-size:12px;opacity:.95}
+  .infogrid{display:grid;grid-template-columns:72px 1fr 54px 1fr;row-gap:8px;column-gap:6px;font-size:12px;align-items:start}
+  .infogrid .k{opacity:.78}
+  .addtag{margin-top:14px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:6px;padding:8px 10px;display:inline-flex;gap:6px;align-items:center;font-size:13px}
+  .panel{margin-top:12px;background:#fff;border:1px solid #e7eaf0;border-radius:12px;overflow:hidden}
+  .ptabs{display:flex;padding:12px 14px 0;gap:28px;border-bottom:1px solid #edf0f5}
+  .ptab{padding:8px 0 12px;color:#6b7280;font-weight:700;cursor:pointer;position:relative}
+  .ptab.active{color:#2563eb}
+  .ptab.active:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;border-radius:3px;background:#3b82f6}
+  .pcontent{padding:14px}
+  .orderbox{display:grid;gap:10px}
+  .block{background:#f8fafc;border:1px solid #e7edf5;border-radius:10px;padding:12px}
+  .btitle{font-weight:800;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+  .line{font-size:13px;color:#475569;line-height:1.65;margin-top:4px}
+  .chance{border:1px solid #dbeafe;background:#eff6ff;border-radius:10px;padding:12px}
+  .chance .badge{display:inline-flex;background:#dcfce7;color:#15803d;padding:3px 8px;border-radius:999px;font-size:12px;font-weight:800;margin-bottom:8px}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .btn{border:1px solid #dbe3ef;background:#fff;border-radius:8px;padding:7px 10px;font-size:12px;cursor:pointer}
+  .btn.primary{background:#2563eb;color:#fff;border-color:#2563eb}
 </style>
 </head>
 <body>
-<div class="desktop">
-  <nav class="appRail">
-    <div class="avatar">张</div>
-    <div class="railIcon active">💬</div>
-    <div class="railIcon">👥</div>
-    <div class="railIcon">📁</div>
-    <div class="railIcon">📊</div>
-    <div class="railSpace"></div>
-    <div class="railIcon">⚙</div>
-  </nav>
+<div class="shell">
+  <div class="appbar">
+    <div class="appicon"><span>💬</span><div class="dot">4</div></div>
+    <div class="appicon active"><span>🔔</span></div>
+    <div class="appicon"><span>✉️</span></div>
+    <div class="appicon"><span>🧭</span></div>
+    <div class="appicon"><span>🗂️</span></div>
+    <div style="margin-top:auto"></div>
+    <div class="appicon"><span>⚙️</span></div>
+  </div>
 
-  <aside class="chatList">
-    <div class="listTop"><div class="search">搜索</div><div class="plus">＋</div></div>
-    <div class="sessions" id="sessions"></div>
-  </aside>
+  <div class="side">
+    <div class="search">
+      <div class="searchbox">🔍　搜索</div>
+      <div class="addbtn">＋</div>
+    </div>
+    <div class="sessionlist">
+      <div class="session">
+        <div class="avatar"><div class="tagnum">1</div></div>
+        <div><div class="sname">醒着做梦 <span class="wx">@微信</span></div><div class="spreview">[小程序] 十角兽云易办　星期一</div></div>
+        <div class="stime"></div>
+      </div>
+      <div class="session">
+        <div class="avatar" style="background:#eff6ff"></div>
+        <div><div class="sname">兽兽提醒测试</div><div class="spreview">兽兽提醒【新客户提醒】…</div></div>
+        <div class="stime">06/11</div>
+      </div>
+      <div class="session">
+        <div class="avatar" style="background:#eff6ff"></div>
+        <div><div class="sname">邮件提醒</div><div class="spreview">伍谷丰已经在使用邮箱</div></div>
+        <div class="stime">06/04</div>
+      </div>
+      <div class="session">
+        <div class="avatar" style="background:#eff6ff"></div>
+        <div><div class="sname">企业微信团队</div><div class="spreview">登录操作通知</div></div>
+        <div class="stime">06/03</div>
+      </div>
+      <div class="session active">
+        <div class="avatar"></div>
+        <div><div class="sname">zhai.zk <span class="wx">@微信</span></div><div class="spreview">尊敬的zhai.zk 您好，…</div></div>
+        <div class="stime">06/03</div>
+      </div>
+      <div class="session">
+        <div class="avatar"></div>
+        <div><div class="sname">凝夕 <span class="wx">@微信</span></div><div class="spreview">111</div></div>
+        <div class="stime">06/03</div>
+      </div>
+      <div class="session">
+        <div class="avatar"></div>
+        <div><div class="sname">孙晓晓 <span style="color:#f97316;font-size:12px">@云帐房网络科技</span></div><div class="spreview">111</div></div>
+        <div class="stime">06/03</div>
+      </div>
+    </div>
+  </div>
 
-  <main class="chat">
-    <div class="chatTop">
-      <div><div class="chatName" id="chatName">A科技有限公司服务群</div><div class="chatSub" id="chatSub">外部联系人群 · 6人</div></div>
-      <div class="topTools"><div class="tool">🔍</div><div class="tool">📌</div><div class="tool">⋯</div></div>
+  <div class="chatwrap">
+    <div class="chathead">
+      <div class="title">zhai.zk <span class="wx">@微信</span></div>
+      <div class="headicons">☰　👤</div>
     </div>
-    <div class="chatBody" id="chatBody"></div>
-    <div class="inputArea">
-      <div class="inputTools"><span>😊</span><span>📎</span><span>✂</span><span>🕘</span></div>
-      <div class="editor" id="editor" contenteditable="true">输入消息…</div>
-      <div class="sendRow"><button class="btn primary" onclick="sendText()">发送</button></div>
+    <div class="chatbody">
+      <div class="watermark"></div>
+      <div class="date">6月3日 11:23</div>
+      <div class="msg"><div class="bubble gray">我是zhai.zk</div></div>
+      <div class="sysline">你已添加了 zhai.zk，现在可以开始聊天了。</div>
+      <div class="msg right"><div class="bubble blue">尊敬的zhai.zk 您好，我是您的权益服务专员。<br>您已成功购买本次服务权益，我将为您提供权益使用指导、问题解答，并持续为您赠送更多增值权益。感谢您的信任～</div></div>
     </div>
-  </main>
+    <div class="editor">
+      <div class="toolbar">😊　✂️　🖼️　📝　📅　📁　📞　💰　🙂　🕓 <span class="sep">⚡ 快速会议　▣</span></div>
+      <div class="inputarea"></div>
+    </div>
+  </div>
 
-  <aside class="side">
-    <div class="sideTop"><span class="sideTitle">云微侧边栏</span><span class="sideClose">收起</span></div>
-    <div class="sideBody">
-      <div class="miniTabs"><div class="tab active" data-tab="ai" onclick="switchTab('ai')">AI提示</div><div class="tab" data-tab="profile" onclick="switchTab('profile')">客户资料</div><div class="tab" data-tab="record" onclick="switchTab('record')">服务记录</div></div>
-      <div class="panel active" id="panel-ai"></div>
-      <div class="panel" id="panel-profile"></div>
-      <div class="panel" id="panel-record"></div>
+  <div class="sidebar">
+    <div class="tabmenu">
+      <div class="gridtabs">
+        <span>企业名片</span><span>客户转账</span><span>快捷回复</span><span>客户详情</span>
+        <span>话术素材</span><span>用户画像</span><span>企业信息</span><span>运营工具</span>
+        <span>话术测试</span><span class="active">画像测试</span><span>小程序</span><span>企业测试</span>
+        <span>运营测试</span><span>代开发</span><span>云微互联</span><span>udesk</span>
+        <span>云易办</span><span>数智员工</span><span>自定义</span><span></span>
+      </div>
     </div>
-  </aside>
+    <div class="sidebody">
+      <div class="custcard">
+        <div class="custtop"><div class="custmini">客户档案</div><div class="custmini">469天</div></div>
+        <div class="custprofile">
+          <div class="custavatar"></div>
+          <div><div class="custname">翟中康</div><div class="custmeta">一级来源：WB-WS小程序（抖音）</div></div>
+        </div>
+        <div class="infogrid">
+          <div class="k">姓名</div><div>翟中康</div><div class="k">年龄</div><div>-</div>
+          <div class="k">电话</div><div>17625286380</div><div class="k">邮箱</div><div>-</div>
+          <div class="k">权益等级</div><div style="grid-column:span 3">电商通银牌、电商通金牌、生态金卡 1星</div>
+        </div>
+        <div class="addtag">＋ 添加标签</div>
+      </div>
+
+      <div class="panel">
+        <div class="ptabs">
+          <div class="ptab active">订单信息</div>
+          <div class="ptab">动态</div>
+        </div>
+        <div class="pcontent orderbox">
+          <div class="chance">
+            <div class="badge">AI发现机会</div>
+            <div class="btitle">高新申报潜力 <span style="color:#ef4444;font-size:12px">高推荐</span></div>
+            <div class="line">客户行业与经营内容接近科技服务；聊天中提到“研发项目”；近 12 个月存在技术服务发票。</div>
+            <div class="btns">
+              <button class="btn primary">复制话术</button>
+              <button class="btn">发到手机</button>
+              <button class="btn">稍后提醒</button>
+            </div>
+          </div>
+
+          <div class="block">
+            <div class="btitle">AI建议话术</div>
+            <div class="line">翟总，看到贵司近期有研发和技术服务相关内容，如果您方便，我可以先帮您做一次高新申报条件评估，先看看是否具备基础条件。</div>
+          </div>
+
+          <div class="block">
+            <div class="btitle">命中依据</div>
+            <div class="line">1. 行业/经营内容含技术服务相关信息</div>
+            <div class="line">2. 聊天记录提到“研发项目”</div>
+            <div class="line">3. 近一年有技术服务发票</div>
+          </div>
+
+          <div class="block">
+            <div class="btitle">运营动作</div>
+            <div class="btns">
+              <button class="btn">查看规则</button>
+              <button class="btn">切换客户机会</button>
+              <button class="btn">不再提示</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="toast" id="toast"></div>
-<script>
-const sessions=[
-{id:'tech',name:'A科技有限公司服务群',last:'软件著作权和项目申报有关系吗？',time:'10:08',avatar:'科',sub:'高新申报提示',level:'高',chat:[['客户','张会计，我们今年有几个研发项目，后面做账这块需要注意什么吗？','09:18'],['我','需要看下研发费用归集情况，我先帮您整理下今年相关科目。','09:24'],['客户','另外有个软件著作权也在申请，这个和项目申报有关系吗？','10:02'],['我','有关系的，知识产权可以作为后续项目申报或高新评估的基础材料之一。','10:08']],profile:[['行业','软件开发'],['服务状态','在服'],['负责顾问','张三'],['近12月收入','860万'],['研发费用','18.6万']],opps:[{name:'高新申报评估',level:'高',reason:'客户行业、研发费用、聊天内容均出现高新申报相关信号。',evidence:['行业为软件开发','经营范围含技术开发/软件开发','研发费用18.6万','聊天提到研发项目和软件著作权'],talk:'王总，看到贵司今年研发投入和技术服务业务都有增长，可以先做一次高新申报条件评估，判断是否具备申报基础。'},{name:'知识产权服务',level:'中',reason:'客户正在申请软件著作权，可顺带做材料规范提醒。',evidence:['聊天提到软件著作权','经营范围含软件开发'],talk:'王总，软件著作权可以作为后续项目申报的基础材料，我们可以先帮您看下现有材料是否完整。'}]},
-{id:'trade',name:'B商贸有限公司服务群',last:'最近业务量上来了，后面可能每个月都差不多。',time:'09:12',avatar:'贸',sub:'涨价沟通提示',level:'高',chat:[['客户','这个月发票比较多，库存这块你们还要我补什么？','08:51'],['我','需要补一下出入库明细，还有几笔流水需要确认用途。','09:05'],['客户','最近业务量上来了，后面可能每个月都差不多。','09:12']],profile:[['行业','商贸批发'],['服务状态','在服'],['负责顾问','张三'],['当前价格','260元/月'],['近12月凭证','1246张']],opps:[{name:'服务费涨价沟通',level:'高',reason:'客户服务工作量明显上升，当前价格低于同类客户。',evidence:['当前收费低于机构均价','凭证和流水明显增加','聊天中客户确认业务量上升'],talk:'李总，您公司今年业务量和票据量都有明显增加，我们这边服务工作量也相应提升，建议近期一起复盘当前服务内容和费用标准。'},{name:'库存规范服务',level:'中',reason:'客户多次询问库存和出入库明细。',evidence:['聊天多次出现库存资料','票据和流水增长'],talk:'李总，近期库存相关资料比较多，可以先做一次库存资料规范梳理，后续对账会更省心。'}]},
-{id:'media',name:'C传媒有限公司服务群',last:'上个月广告公司的票都到了吗？',time:'11:18',avatar:'传',sub:'广告投放提示',level:'中',chat:[['客户','上个月广告公司的票都到了吗？','11:13'],['我','到了，信息流投放和品牌推广两张都已经采集。','11:18']],profile:[['行业','文化传媒'],['服务状态','在服'],['负责顾问','王五'],['营销类发票','12张'],['营销金额','42.8万']],opps:[{name:'数字营销服务',level:'中',reason:'发票体现客户有持续广告投放行为。',evidence:['发票项目命中信息流投放','近半年营销类金额42.8万','供应商多为广告公司'],talk:'赵总，看到贵司近期有广告投放，如果关注投放效果或获客成本，我们可以先帮您做一次营销投入梳理。'}]}
-];
-let current=sessions[0];
-function levelCls(l){return l==='高'?'red':l==='中'?'orange':'greenB'}
-function renderSessions(){document.getElementById('sessions').innerHTML=sessions.map(s=>`<div class="session ${s.id===current.id?'active':''}" onclick="selectSession('${s.id}')"><div class="sAvatar">${s.avatar}</div><div style="min-width:0"><div class="sName">${s.name}</div><div class="sMsg">${s.last}</div></div><div class="sTime">${s.time}</div></div>`).join('')}
-function selectSession(id){current=sessions.find(s=>s.id===id);document.getElementById('chatName').textContent=current.name;document.getElementById('chatSub').textContent='外部联系人群 · 6人';renderSessions();renderChat();renderSide();}
-function renderChat(){const body=document.getElementById('chatBody');body.innerHTML='<div class="date">今天</div>'+current.chat.map(m=>`<div class="msg ${m[0]==='我'?'me':''}"><div class="mAvatar">${m[0]==='我'?'我':'客'}</div><div><div class="bubble">${highlight(m[1])}</div><div class="msgTime">${m[2]}</div></div></div>`).join('');body.scrollTop=body.scrollHeight}
-function highlight(t){['研发项目','软件著作权','项目申报','业务量','库存','广告公司','信息流投放','品牌推广'].forEach(w=>{t=t.replaceAll(w,`<span class="highlight">${w}</span>`)});return t}
-function renderSide(){renderAI();renderProfile();renderRecord();}
-function renderAI(){document.getElementById('panel-ai').innerHTML=`<div class="customerCard"><div class="cTop"><div><div class="cName">${current.name.replace('服务群','')}</div><div class="cMeta">${current.sub} · ${current.opps.length} 条建议</div></div><span class="badge ${levelCls(current.level)}">${current.level}推荐</span></div></div><div class="section">当前对话可参考</div>${current.opps.map((o,i)=>`<div class="opportunity"><div class="oppHead"><div class="oppName">${o.name}</div><span class="badge ${levelCls(o.level)}">${o.level}</span></div><div class="oppReason">${o.reason}</div><div class="section" style="margin-top:10px">依据</div><div class="evidence">${o.evidence.map((e,j)=>`<div class="evi"><b>${j+1}</b>${e}</div>`).join('')}</div><div class="section" style="margin-top:10px">可复制话术</div><div class="talk">${o.talk}</div><div class="actions"><button class="btn primary wide" onclick="copyTalk('${encodeURIComponent(o.talk)}')">复制话术</button><button class="btn secondary" onclick="ignoreOpp()">不再提示</button><button class="btn soft" onclick="toast('已标记：稍后看')">稍后看</button></div></div>`).join('')}`}
-function renderProfile(){document.getElementById('panel-profile').innerHTML=`<div class="section">客户资料</div><table class="infoTable">${current.profile.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table>`}
-function renderRecord(){document.getElementById('panel-record').innerHTML=`<div class="section">近期服务记录</div><div class="evidence"><div class="evi"><b>今天</b>查看云微侧边栏AI提示</div><div class="evi"><b>昨天</b>已完成本月发票采集提醒</div><div class="evi"><b>本周</b>客户咨询次数高于近三月均值</div></div>`}
-function switchTab(tab){document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+tab).classList.add('active')}
-function copyTalk(t){const text=decodeURIComponent(t);navigator.clipboard&&navigator.clipboard.writeText(text);document.getElementById('editor').textContent=text;toast('话术已复制，并放到输入框，可修改后发送')}
-function sendText(){const text=document.getElementById('editor').textContent.trim();if(!text||text==='输入消息…'){toast('请输入消息');return}current.chat.push(['我',text,'刚刚']);document.getElementById('editor').textContent='输入消息…';renderChat();toast('已发送')}
-function ignoreOpp(){toast('已记录：本次不再提示')}
-function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}
-renderSessions();selectSession('tech');
-</script>
 </body>
 </html>
