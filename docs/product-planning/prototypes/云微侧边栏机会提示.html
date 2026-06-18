@@ -5,221 +5,44 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>企业微信风格 - 云微侧边栏机会提示</title>
 <style>
-  :root{
-    --bg:#f3f4f6;--panel:#fff;--line:#e5e7eb;--text:#111827;--muted:#6b7280;
-    --blue:#3b82f6;--green:#22c55e;--soft:#eff6ff;--soft2:#f8fafc;--deep:#2563eb;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:#eef2f7;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:var(--text)}
-  .shell{height:100vh;display:grid;grid-template-columns:72px 236px minmax(520px,1fr) 338px;overflow:hidden;background:#f5f6f8}
-  .appbar{background:#f3f4f6;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:12px}
-  .appicon{width:42px;height:42px;border-radius:12px;background:#fff;border:1px solid #e6e8ee;display:grid;place-items:center;font-size:20px;color:#475569;position:relative}
-  .appicon.active{background:linear-gradient(180deg,#4f8cff,#2f6ef2);color:#fff;border-color:#4f8cff;box-shadow:0 8px 20px rgba(47,110,242,.25)}
-  .dot{position:absolute;right:-2px;top:-3px;min-width:18px;height:18px;border-radius:999px;background:#ef4444;color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center;padding:0 4px}
-  .side{background:#f7f8fa;border-right:1px solid var(--line);display:flex;flex-direction:column}
-  .search{padding:8px 10px;display:flex;gap:8px;align-items:center}
-  .searchbox{flex:1;height:34px;border-radius:8px;background:#eef1f5;border:1px solid #e5e7eb;display:flex;align-items:center;padding:0 12px;color:#94a3b8}
-  .addbtn{width:34px;height:34px;border-radius:8px;background:#eef1f5;border:1px solid #e5e7eb;display:grid;place-items:center;font-size:22px;color:#6b7280}
-  .sessionlist{flex:1;overflow:auto;padding:6px}
-  .session{display:grid;grid-template-columns:48px 1fr 46px;gap:10px;padding:10px 8px;border-radius:10px;cursor:pointer;align-items:center}
-  .session:hover{background:#eef2f7}
-  .session.active{background:linear-gradient(180deg,#4f8cff,#3b82f6);color:#fff}
-  .avatar{width:48px;height:48px;border-radius:10px;background:#dbeafe;background-size:cover;background-position:center;position:relative}
-  .tagnum{position:absolute;right:-4px;top:-4px;width:20px;height:20px;border-radius:999px;background:#ff5a5f;color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center}
-  .sname{font-weight:800;font-size:14px;line-height:1.2;display:flex;align-items:center;gap:4px}
-  .wx{color:#16a34a;font-weight:700;font-size:12px}
-  .spreview{font-size:12px;color:#6b7280;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .session.active .spreview,.session.active .stime,.session.active .wx{color:#eaf2ff}
-  .stime{font-size:12px;color:#94a3b8;text-align:right;align-self:start}
-  .chatwrap{display:flex;flex-direction:column;background:#fff}
-  .chathead{height:54px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#fbfbfc}
-  .title{font-size:15px;font-weight:800;display:flex;align-items:center;gap:6px}
-  .headicons{display:flex;gap:14px;color:#6b7280}
-  .chatbody{flex:1;overflow:auto;position:relative;padding:14px 0;background:#f5f6f8}
-  .watermark{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(-17deg, transparent 0 140px, rgba(148,163,184,.12) 140px 141px, transparent 141px 280px);opacity:.55}
-  .date{font-size:12px;color:#9ca3af;text-align:center;margin:6px 0 14px;position:relative;z-index:1}
-  .msg{position:relative;z-index:1;display:flex;gap:10px;padding:0 24px;margin-bottom:16px}
-  .msg.right{justify-content:flex-end}
-  .bubble{max-width:580px;padding:12px 14px;border-radius:8px;line-height:1.7;font-size:14px;box-shadow:0 1px 0 rgba(0,0,0,.03)}
-  .bubble.gray{background:#fff;border:1px solid #eceef2}
-  .bubble.blue{background:#b8d9f4;border:1px solid #a8ccea}
-  .sysline{position:relative;z-index:1;text-align:center;color:#9ca3af;font-size:12px;margin:8px 0 16px}
-  .editor{height:160px;background:#fff;border-top:1px solid var(--line);display:flex;flex-direction:column}
-  .toolbar{height:46px;padding:0 16px;display:flex;align-items:center;gap:14px;color:#4b5563}
-  .toolbar .sep{margin-left:auto;color:#111827;font-weight:700}
-  .inputarea{flex:1;padding:0 16px 14px;color:#cbd5e1}
-  .sidebar{background:#f6f7fb;border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}
-  .tabmenu{padding:14px 16px 8px;background:#fff;border-bottom:1px solid var(--line)}
-  .gridtabs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px;font-size:13px;color:#4b5563}
-  .gridtabs span{cursor:pointer;white-space:nowrap}
-  .gridtabs .active{font-weight:800;color:#111827;background:#f3f4f6;border-radius:6px;padding:6px 8px;text-align:center}
-  .sidebody{flex:1;overflow:auto;padding:0 12px 12px}
-  .custcard{margin-top:0;background:linear-gradient(180deg,#3878ff,#2563eb);border-radius:0 0 12px 12px;color:#fff;padding:10px 14px 14px;position:relative;overflow:hidden}
-  .custtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-  .custmini{font-size:12px;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 8px}
-  .custprofile{display:flex;gap:10px;align-items:center;margin:8px 0 12px}
-  .custavatar{width:44px;height:44px;border-radius:999px;background:#fff;background-size:cover;background-position:center;border:2px solid rgba(255,255,255,.75)}
-  .custname{font-size:18px;font-weight:800}
-  .custmeta{font-size:12px;opacity:.95}
-  .infogrid{display:grid;grid-template-columns:72px 1fr 54px 1fr;row-gap:8px;column-gap:6px;font-size:12px;align-items:start}
-  .infogrid .k{opacity:.78}
-  .addtag{margin-top:14px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:6px;padding:8px 10px;display:inline-flex;gap:6px;align-items:center;font-size:13px}
-  .panel{margin-top:12px;background:#fff;border:1px solid #e7eaf0;border-radius:12px;overflow:hidden}
-  .ptabs{display:flex;padding:12px 14px 0;gap:28px;border-bottom:1px solid #edf0f5}
-  .ptab{padding:8px 0 12px;color:#6b7280;font-weight:700;cursor:pointer;position:relative}
-  .ptab.active{color:#2563eb}
-  .ptab.active:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;border-radius:3px;background:#3b82f6}
-  .pcontent{padding:14px}
-  .orderbox{display:grid;gap:10px}
-  .block{background:#f8fafc;border:1px solid #e7edf5;border-radius:10px;padding:12px}
-  .btitle{font-weight:800;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
-  .line{font-size:13px;color:#475569;line-height:1.65;margin-top:4px}
-  .chance{border:1px solid #dbeafe;background:#eff6ff;border-radius:10px;padding:12px}
-  .chance .badge{display:inline-flex;background:#dcfce7;color:#15803d;padding:3px 8px;border-radius:999px;font-size:12px;font-weight:800;margin-bottom:8px}
-  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-  .btn{border:1px solid #dbe3ef;background:#fff;border-radius:8px;padding:7px 10px;font-size:12px;cursor:pointer}
-  .btn.primary{background:#2563eb;color:#fff;border-color:#2563eb}
+*{box-sizing:border-box}body{margin:0;background:#eef2f7;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;color:#111827;font-size:14px}svg{display:block}.icon{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.shell{height:100vh;display:grid;grid-template-columns:72px 236px minmax(540px,1fr) 340px;background:#f5f6f8;overflow:hidden}.appbar{background:#eef2f7;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:12px}.brand{width:30px;height:30px;border-radius:10px;background:linear-gradient(180deg,#44c7ff,#2f6ef2);position:relative;box-shadow:0 6px 16px rgba(47,110,242,.22);margin-bottom:4px}.brand:before,.brand:after,.brand i{content:"";position:absolute;background:#fff;border-radius:999px}.brand:before{width:14px;height:14px;left:5px;top:8px}.brand:after{width:10px;height:10px;right:5px;top:6px}.brand i{width:6px;height:6px;right:7px;bottom:7px}.appicon{width:42px;height:42px;border-radius:12px;background:#fff;border:1px solid #e4e8ef;color:#667085;display:grid;place-items:center;position:relative}.appicon.active{background:linear-gradient(180deg,#4f8cff,#2f6ef2);border-color:#4f8cff;color:#fff;box-shadow:0 8px 20px rgba(47,110,242,.24)}.dot{position:absolute;right:-2px;top:-3px;min-width:18px;height:18px;background:#ef4444;color:#fff;border-radius:999px;font-size:11px;font-weight:800;display:grid;place-items:center;padding:0 4px}.side{background:#f7f8fa;border-right:1px solid #e5e7eb;display:flex;flex-direction:column}.search{height:50px;padding:8px 10px;display:flex;gap:8px}.searchbox{flex:1;border:1px solid #e2e8f0;border-radius:8px;background:#eef1f5;color:#8b95a5;display:flex;align-items:center;gap:8px;padding:0 12px}.searchbox .icon{width:15px;height:15px}.addbtn{width:34px;height:34px;border:1px solid #e2e8f0;border-radius:8px;background:#eef1f5;color:#5f6b7a;display:grid;place-items:center}.sessionlist{flex:1;overflow:auto;padding:6px}.session{display:grid;grid-template-columns:48px 1fr 44px;gap:10px;align-items:center;padding:10px 8px;border-radius:10px;cursor:pointer}.session:hover{background:#eef2f7}.session.active{background:linear-gradient(180deg,#4f8cff,#3b82f6);color:#fff}.avatar{width:48px;height:48px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:800;position:relative;overflow:hidden}.land{background:linear-gradient(135deg,#93c5fd,#34d399)}.sys{background:#3b82f6}.mail{background:#60a5fa}.team{background:#4f46e5}.p1{background:linear-gradient(135deg,#f59e0b,#fb7185)}.p2{background:linear-gradient(135deg,#10b981,#0ea5e9)}.p3{background:linear-gradient(135deg,#fb7185,#8b5cf6)}.num{position:absolute;right:-4px;top:-4px;width:20px;height:20px;border-radius:999px;background:#ff5a5f;color:#fff;font-size:11px;display:grid;place-items:center}.sname{font-weight:800;font-size:14px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wx{color:#16a34a;font-weight:700;font-size:12px}.spreview{font-size:12px;color:#6b7280;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.session.active .spreview,.session.active .stime,.session.active .wx{color:#eaf2ff}.stime{font-size:12px;color:#94a3b8;text-align:right;align-self:start}.chat{display:flex;flex-direction:column;background:#fff}.chathead{height:54px;background:#fbfbfc;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 18px}.chatname{font-weight:900;font-size:15px;display:flex;align-items:center;gap:6px}.headtools{display:flex;gap:8px;color:#667085}.headtool{width:30px;height:30px;border-radius:8px;display:grid;place-items:center}.headtool:hover{background:#eef2f7}.chatbody{flex:1;position:relative;background:#f5f6f8;overflow:auto;padding:14px 0}.watermark{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(-17deg,transparent 0 140px,rgba(148,163,184,.12) 140px 141px,transparent 141px 280px);opacity:.55}.date{position:relative;z-index:1;text-align:center;color:#9ca3af;font-size:12px;margin:6px 0 14px}.msg{position:relative;z-index:1;display:flex;padding:0 24px;margin-bottom:16px}.msg.right{justify-content:flex-end}.bubble{max-width:580px;padding:12px 14px;border-radius:8px;line-height:1.7;font-size:14px;box-shadow:0 1px 0 rgba(0,0,0,.03)}.white{background:#fff;border:1px solid #edf0f5}.blue{background:#b8d9f4;border:1px solid #a8ccea}.sysline{position:relative;z-index:1;text-align:center;color:#9ca3af;font-size:12px;margin:8px 0 16px}.editor{height:160px;background:#fff;border-top:1px solid #e5e7eb;display:flex;flex-direction:column}.toolbar{height:46px;padding:0 16px;display:flex;align-items:center;gap:8px;color:#475569}.tool{width:28px;height:28px;border-radius:7px;display:grid;place-items:center}.tool:hover{background:#f1f5f9}.tool .icon{width:16px;height:16px}.meeting{margin-left:auto;display:flex;align-items:center;gap:8px;color:#1f2937;font-weight:700}.inputarea{flex:1}.sidebar{background:#f6f7fb;border-left:1px solid #e5e7eb;display:flex;flex-direction:column;overflow:hidden}.tabmenu{background:#fff;border-bottom:1px solid #e5e7eb;padding:14px 16px 8px}.gridtabs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px;font-size:13px;color:#4b5563}.gridtabs span{white-space:nowrap;cursor:pointer}.gridtabs .active{font-weight:800;color:#111827;background:#f3f4f6;border-radius:6px;padding:6px 8px;text-align:center}.sidebody{flex:1;overflow:auto;padding:0 12px 12px}.custcard{background:linear-gradient(180deg,#3878ff,#2563eb);color:#fff;border-radius:0 0 12px 12px;padding:10px 14px 14px}.custtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.pill{font-size:12px;background:rgba(255,255,255,.18);border-radius:999px;padding:3px 8px}.custprofile{display:flex;align-items:center;gap:10px;margin:8px 0 12px}.custavatar{width:44px;height:44px;border-radius:999px;background:linear-gradient(135deg,#fbbf24,#fb7185);border:2px solid rgba(255,255,255,.75);display:grid;place-items:center;color:#fff;font-weight:900}.custname{font-weight:900;font-size:18px}.custmeta{font-size:12px;opacity:.95}.infogrid{display:grid;grid-template-columns:72px 1fr 54px 1fr;gap:8px 6px;font-size:12px}.k{opacity:.78}.addtag{margin-top:14px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:6px;padding:8px 10px;display:inline-flex;align-items:center;gap:6px;font-size:13px}.addtag .icon{width:14px;height:14px}.panel{margin-top:12px;background:#fff;border:1px solid #e7eaf0;border-radius:12px;overflow:hidden}.ptabs{display:flex;gap:28px;padding:12px 14px 0;border-bottom:1px solid #edf0f5}.ptab{padding:8px 0 12px;color:#6b7280;font-weight:700;position:relative}.ptab.active{color:#2563eb}.ptab.active:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;border-radius:3px;background:#3b82f6}.pcontent{padding:14px;display:grid;gap:10px}.chance{border:1px solid #dbeafe;background:#eff6ff;border-radius:10px;padding:12px}.label{display:inline-flex;background:#dcfce7;color:#15803d;border-radius:999px;padding:3px 8px;font-size:12px;font-weight:800;margin-bottom:8px}.btitle{font-weight:900;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.line{font-size:13px;color:#475569;line-height:1.65;margin-top:4px}.block{background:#f8fafc;border:1px solid #e7edf5;border-radius:10px;padding:12px}.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.btn{border:1px solid #dbe3ef;background:#fff;border-radius:8px;padding:7px 10px;font-size:12px;cursor:pointer}.btn.primary{background:#2563eb;color:#fff;border-color:#2563eb}
 </style>
 </head>
 <body>
 <div class="shell">
   <div class="appbar">
-    <div class="appicon"><span>💬</span><div class="dot">4</div></div>
-    <div class="appicon active"><span>🔔</span></div>
-    <div class="appicon"><span>✉️</span></div>
-    <div class="appicon"><span>🧭</span></div>
-    <div class="appicon"><span>🗂️</span></div>
+    <div class="brand"><i></i></div>
+    <div class="appicon"><svg class="icon" viewBox="0 0 24 24"><path d="M4 7.5A3.5 3.5 0 0 1 7.5 4h9A3.5 3.5 0 0 1 20 7.5v5A3.5 3.5 0 0 1 16.5 16h-6L6 20v-4H7.5A3.5 3.5 0 0 1 4 12.5z"/></svg><div class="dot">4</div></div>
+    <div class="appicon active"><svg class="icon" viewBox="0 0 24 24"><path d="M8 18h8"/><path d="M10 21h4"/><path d="M6.5 10a5.5 5.5 0 1 1 11 0c0 2.8 1.5 3.9 1.5 5H5c0-1.1 1.5-2.2 1.5-5z"/></svg></div>
+    <div class="appicon"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><path d="m4 8 8 6 8-6"/></svg></div>
+    <div class="appicon"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></div>
+    <div class="appicon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 19a4 4 0 0 1 4-4h6v4z"/><path d="M7 5h10v10"/><path d="M7 5v14"/></svg></div>
     <div style="margin-top:auto"></div>
-    <div class="appicon"><span>⚙️</span></div>
+    <div class="appicon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></div>
   </div>
 
   <div class="side">
-    <div class="search">
-      <div class="searchbox">🔍　搜索</div>
-      <div class="addbtn">＋</div>
-    </div>
+    <div class="search"><div class="searchbox"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>搜索</div><div class="addbtn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
     <div class="sessionlist">
-      <div class="session">
-        <div class="avatar"><div class="tagnum">1</div></div>
-        <div><div class="sname">醒着做梦 <span class="wx">@微信</span></div><div class="spreview">[小程序] 十角兽云易办　星期一</div></div>
-        <div class="stime"></div>
-      </div>
-      <div class="session">
-        <div class="avatar" style="background:#eff6ff"></div>
-        <div><div class="sname">兽兽提醒测试</div><div class="spreview">兽兽提醒【新客户提醒】…</div></div>
-        <div class="stime">06/11</div>
-      </div>
-      <div class="session">
-        <div class="avatar" style="background:#eff6ff"></div>
-        <div><div class="sname">邮件提醒</div><div class="spreview">伍谷丰已经在使用邮箱</div></div>
-        <div class="stime">06/04</div>
-      </div>
-      <div class="session">
-        <div class="avatar" style="background:#eff6ff"></div>
-        <div><div class="sname">企业微信团队</div><div class="spreview">登录操作通知</div></div>
-        <div class="stime">06/03</div>
-      </div>
-      <div class="session active">
-        <div class="avatar"></div>
-        <div><div class="sname">zhai.zk <span class="wx">@微信</span></div><div class="spreview">尊敬的zhai.zk 您好，…</div></div>
-        <div class="stime">06/03</div>
-      </div>
-      <div class="session">
-        <div class="avatar"></div>
-        <div><div class="sname">凝夕 <span class="wx">@微信</span></div><div class="spreview">111</div></div>
-        <div class="stime">06/03</div>
-      </div>
-      <div class="session">
-        <div class="avatar"></div>
-        <div><div class="sname">孙晓晓 <span style="color:#f97316;font-size:12px">@云帐房网络科技</span></div><div class="spreview">111</div></div>
-        <div class="stime">06/03</div>
-      </div>
+      <div class="session"><div class="avatar land">景<div class="num">1</div></div><div><div class="sname">醒着做梦 <span class="wx">@微信</span></div><div class="spreview">[小程序] 十角兽云易办　星期一</div></div><div class="stime"></div></div>
+      <div class="session"><div class="avatar sys">提</div><div><div class="sname">兽兽提醒测试</div><div class="spreview">兽兽提醒【新客户提醒】…</div></div><div class="stime">06/11</div></div>
+      <div class="session"><div class="avatar mail">邮</div><div><div class="sname">邮件提醒</div><div class="spreview">伍谷丰已经在使用邮箱</div></div><div class="stime">06/04</div></div>
+      <div class="session"><div class="avatar team">企</div><div><div class="sname">企业微信团队</div><div class="spreview">登录操作通知</div></div><div class="stime">06/03</div></div>
+      <div class="session active"><div class="avatar p1">翟</div><div><div class="sname">zhai.zk <span class="wx">@微信</span></div><div class="spreview">尊敬的zhai.zk 您好，…</div></div><div class="stime">06/03</div></div>
+      <div class="session"><div class="avatar p2">凝</div><div><div class="sname">凝夕 <span class="wx">@微信</span></div><div class="spreview">111</div></div><div class="stime">06/03</div></div>
+      <div class="session"><div class="avatar p3">孙</div><div><div class="sname">孙晓晓 <span style="color:#f97316;font-size:12px">@云帐房网络科技</span></div><div class="spreview">111</div></div><div class="stime">06/03</div></div>
     </div>
   </div>
 
-  <div class="chatwrap">
-    <div class="chathead">
-      <div class="title">zhai.zk <span class="wx">@微信</span></div>
-      <div class="headicons">☰　👤</div>
-    </div>
-    <div class="chatbody">
-      <div class="watermark"></div>
-      <div class="date">6月3日 11:23</div>
-      <div class="msg"><div class="bubble gray">我是zhai.zk</div></div>
-      <div class="sysline">你已添加了 zhai.zk，现在可以开始聊天了。</div>
-      <div class="msg right"><div class="bubble blue">尊敬的zhai.zk 您好，我是您的权益服务专员。<br>您已成功购买本次服务权益，我将为您提供权益使用指导、问题解答，并持续为您赠送更多增值权益。感谢您的信任～</div></div>
-    </div>
-    <div class="editor">
-      <div class="toolbar">😊　✂️　🖼️　📝　📅　📁　📞　💰　🙂　🕓 <span class="sep">⚡ 快速会议　▣</span></div>
-      <div class="inputarea"></div>
-    </div>
+  <div class="chat">
+    <div class="chathead"><div class="chatname">zhai.zk <span class="wx">@微信</span></div><div class="headtools"><div class="headtool"><svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div><div class="headtool"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 19c1.7-3 4.1-4.5 7-4.5s5.3 1.5 7 4.5"/></svg></div></div></div>
+    <div class="chatbody"><div class="watermark"></div><div class="date">6月3日 11:23</div><div class="msg"><div class="bubble white">我是zhai.zk</div></div><div class="sysline">你已添加了 zhai.zk，现在可以开始聊天了。</div><div class="msg right"><div class="bubble blue">尊敬的zhai.zk 您好，我是您的权益服务专员。<br>您已成功购买本次服务权益，我将为您提供权益使用指导、问题解答，并持续为您赠送更多增值权益。感谢您的信任～</div></div></div>
+    <div class="editor"><div class="toolbar"><div class="tool"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M9 10h.01M15 10h.01M9 15c1 .8 2 .9 3 .9s2-.1 3-.9"/></svg></div><div class="tool"><svg class="icon" viewBox="0 0 24 24"><path d="M4 20 20 4M8 4h4v4M12 20H8v-4"/></svg></div><div class="tool"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="m6 16 4-4 3 3 2-2 3 3"/></svg></div><div class="tool"><svg class="icon" viewBox="0 0 24 24"><path d="M6 4h9l3 3v13H6zM15 4v3h3"/></svg></div><div class="tool"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></div><div class="tool"><svg class="icon" viewBox="0 0 24 24"><path d="M7 5h3l2 5-2 2a13 13 0 0 0 4 4l2-2 5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 5 7a2 2 0 0 1 2-2z"/></svg></div><div class="tool"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div><div class="meeting"><svg class="icon" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>快速会议</div></div><div class="inputarea"></div></div>
   </div>
 
   <div class="sidebar">
-    <div class="tabmenu">
-      <div class="gridtabs">
-        <span>企业名片</span><span>客户转账</span><span>快捷回复</span><span>客户详情</span>
-        <span>话术素材</span><span>用户画像</span><span>企业信息</span><span>运营工具</span>
-        <span>话术测试</span><span class="active">画像测试</span><span>小程序</span><span>企业测试</span>
-        <span>运营测试</span><span>代开发</span><span>云微互联</span><span>udesk</span>
-        <span>云易办</span><span>数智员工</span><span>自定义</span><span></span>
-      </div>
-    </div>
-    <div class="sidebody">
-      <div class="custcard">
-        <div class="custtop"><div class="custmini">客户档案</div><div class="custmini">469天</div></div>
-        <div class="custprofile">
-          <div class="custavatar"></div>
-          <div><div class="custname">翟中康</div><div class="custmeta">一级来源：WB-WS小程序（抖音）</div></div>
-        </div>
-        <div class="infogrid">
-          <div class="k">姓名</div><div>翟中康</div><div class="k">年龄</div><div>-</div>
-          <div class="k">电话</div><div>17625286380</div><div class="k">邮箱</div><div>-</div>
-          <div class="k">权益等级</div><div style="grid-column:span 3">电商通银牌、电商通金牌、生态金卡 1星</div>
-        </div>
-        <div class="addtag">＋ 添加标签</div>
-      </div>
-
-      <div class="panel">
-        <div class="ptabs">
-          <div class="ptab active">订单信息</div>
-          <div class="ptab">动态</div>
-        </div>
-        <div class="pcontent orderbox">
-          <div class="chance">
-            <div class="badge">AI发现机会</div>
-            <div class="btitle">高新申报潜力 <span style="color:#ef4444;font-size:12px">高推荐</span></div>
-            <div class="line">客户行业与经营内容接近科技服务；聊天中提到“研发项目”；近 12 个月存在技术服务发票。</div>
-            <div class="btns">
-              <button class="btn primary">复制话术</button>
-              <button class="btn">发到手机</button>
-              <button class="btn">稍后提醒</button>
-            </div>
-          </div>
-
-          <div class="block">
-            <div class="btitle">AI建议话术</div>
-            <div class="line">翟总，看到贵司近期有研发和技术服务相关内容，如果您方便，我可以先帮您做一次高新申报条件评估，先看看是否具备基础条件。</div>
-          </div>
-
-          <div class="block">
-            <div class="btitle">命中依据</div>
-            <div class="line">1. 行业/经营内容含技术服务相关信息</div>
-            <div class="line">2. 聊天记录提到“研发项目”</div>
-            <div class="line">3. 近一年有技术服务发票</div>
-          </div>
-
-          <div class="block">
-            <div class="btitle">运营动作</div>
-            <div class="btns">
-              <button class="btn">查看规则</button>
-              <button class="btn">切换客户机会</button>
-              <button class="btn">不再提示</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="tabmenu"><div class="gridtabs"><span>企业名片</span><span>客户信息</span><span>快捷回复</span><span>客户详情</span><span>话术素材</span><span>用户画像</span><span>企业信息</span><span>运营工具</span><span>话术测试</span><span class="active">画像测试</span><span>小程序</span><span>企业测试</span><span>运营测试</span><span>代开发</span><span>云微互联</span><span>udesk</span><span>云易办</span><span>数智员工</span><span>自定义</span><span></span></div></div>
+    <div class="sidebody"><div class="custcard"><div class="custtop"><div class="pill">客户档案</div><div class="pill">469天</div></div><div class="custprofile"><div class="custavatar">翟</div><div><div class="custname">翟中康</div><div class="custmeta">一级来源：WB-WS小程序</div></div></div><div class="infogrid"><div class="k">姓名</div><div>翟中康</div><div class="k">年龄</div><div>-</div><div class="k">电话</div><div>已隐藏</div><div class="k">邮箱</div><div>-</div><div class="k">权益等级</div><div style="grid-column:span 3">电商通银牌、生态金卡 1星</div></div><div class="addtag"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>添加标签</div></div><div class="panel"><div class="ptabs"><div class="ptab active">订单信息</div><div class="ptab">动态</div></div><div class="pcontent"><div class="chance"><div class="label">AI发现机会</div><div class="btitle">高新申报潜力 <span style="color:#ef4444;font-size:12px">高推荐</span></div><div class="line">客户行业与经营内容接近科技服务；聊天中提到研发项目；近 12 个月存在技术服务发票。</div><div class="btns"><button class="btn primary">复制话术</button><button class="btn">发到手机</button><button class="btn">稍后提醒</button></div></div><div class="block"><div class="btitle">AI建议话术</div><div class="line">翟总，看到贵司近期有研发和技术服务相关内容，可以先帮您做一次高新申报条件评估。</div></div><div class="block"><div class="btitle">命中依据</div><div class="line">1. 行业/经营内容含技术服务相关信息</div><div class="line">2. 聊天记录提到研发项目</div><div class="line">3. 近一年有技术服务发票</div></div><div class="block"><div class="btitle">运营动作</div><div class="btns"><button class="btn">查看规则</button><button class="btn">切换客户机会</button><button class="btn">不再提示</button></div></div></div></div></div>
   </div>
 </div>
 </body>
